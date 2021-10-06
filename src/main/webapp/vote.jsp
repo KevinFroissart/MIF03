@@ -32,16 +32,21 @@
         </ul>
     </aside>
     <article class="contenu">
-        <label>Sélectionné un candidat:</label>
-        <%
-            Map<String, Candidat> candidats = (Map<String, Candidat>) application.getAttribute("candidats");
-        %>
-        <select name="candidat" id="selection">
-            <option value="">----</option>
-            <c:forEach items="<%= candidats.keySet()%>" var="nomCandidat">
-                <option><c:out value="${nomCandidat}"/> ${nomCandidat} </option>
-            </c:forEach>
-        </select>
+        <form method="post" action="castVote">
+            <label>Sélectionnez un candidat:</label>
+            <%
+                Map<String, Candidat> candidats = (Map<String, Candidat>) application.getAttribute("candidats");
+            %>
+            <select name="candidat" id="selection">
+                <option value="">----</option>
+                <c:forEach items="<%= candidats.keySet()%>" var="nomCandidat">
+                    <option><c:out value="${nomCandidat}"/></option>
+                </c:forEach>
+            </select>
+            <p>
+                <input type="submit" name="action" value="Voter">
+            </p>
+        </form>
     </article>
 </main>
 </body>
