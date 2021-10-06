@@ -30,10 +30,11 @@ test java:
 deploy:
   stage: deploy
   before_script:
+    - . setup-mvn-proxy.sh
     - chmod 400 $CI_SSH_KEY
   dependencies:
     - test java
   script:
     - mvn compile
     - mvn package
-    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY /target/server.war gitlabci@192.168.75.28:/opt/tomcat/webapps/v1.war
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY target/server.war gitlabci@192.168.75.28:/opt/tomcat/webapps/v1.war
