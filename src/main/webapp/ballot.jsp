@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: kevin
@@ -13,9 +14,14 @@
 </head>
 <body>
 <header>
-    <c:if test="${sessionScope.user != null}">
-        <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
-    </c:if>
+    <c:choose>
+        <c:when test="${sessionScope.user == null}">
+            <% response.sendRedirect("index.html"); %>
+        </c:when>
+        <c:otherwise>
+            <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
+        </c:otherwise>
+    </c:choose>
     <h1 class="header-titre">Votre preuve de vote</h1>
 </header>
 <main id="contenu" class="wrapper">
@@ -29,10 +35,17 @@
         </ul>
     </aside>
     <article class="contenu">
-        <p>Votre vote: </p>
-        <p>
-            <input type="submit" name="action" value="supprimer">
-        </p>
+        <c:choose>
+            <c:when test="${sessionScope.user == null}"> <%-- TODO: remplacer par une methode qui permet de savoir si l'utilisateur a voté --%>
+                <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter </p>
+            </c:when>
+            <c:otherwise>
+                <p>Votre vote: </p>
+                <p>
+                    <input type="submit" name="action" value="supprimer">
+                </p>
+            </c:otherwise>
+        </c:choose>
     </article>
 </main>
 </body>

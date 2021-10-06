@@ -16,9 +16,14 @@
 </head>
 <body>
 <header>
-    <c:if test="${sessionScope.user != null}">
-        <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
-    </c:if>
+    <c:choose>
+        <c:when test="${sessionScope.user == null}">
+            <% response.sendRedirect("index.html"); %>
+        </c:when>
+        <c:otherwise>
+            <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
+        </c:otherwise>
+    </c:choose>
     <h1 class="header-titre">Voter pour qui vous voulez</h1>
 </header>
 <main id="contenu" class="wrapper">
