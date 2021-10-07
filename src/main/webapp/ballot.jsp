@@ -13,27 +13,14 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<header>
-    <c:choose>
-        <c:when test="${sessionScope.user == null}">
-            <% response.sendRedirect("index.html"); %>
-        </c:when>
-        <c:otherwise>
-            <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
-        </c:otherwise>
-    </c:choose>
-    <h1 class="header-titre">Votre preuve de vote</h1>
-</header>
+<c:if test="${sessionScope.user == null}">
+    <% response.sendRedirect("index.html"); %>
+</c:if>
+<jsp:include page="WEB-INF/components/bonjour.jsp">
+    <jsp:param name="titre" value="Votre preuve de vote"/>
+</jsp:include>
 <main id="contenu" class="wrapper">
-    <aside class="menu">
-        <h2>Menu</h2>
-        <ul>
-            <li><a href="vote.jsp">Voter</a></li>
-            <li><a href="ballot.jsp">Votre vote</a></li>
-            <li><a href="resultats.jsp">Résultats</a></li>
-            <li><a href="deco">Déconnexion</a></li>
-        </ul>
-    </aside>
+    <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
         <c:choose>
             <c:when test="${sessionScope.user == null}"> <%-- TODO: remplacer par une methode qui permet de savoir si l'utilisateur a voté --%>
@@ -49,4 +36,5 @@
     </article>
 </main>
 </body>
+<%@include file="WEB-INF/components/footer.jsp" %>
 </html>
