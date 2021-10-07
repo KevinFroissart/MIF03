@@ -19,22 +19,14 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<header>
-    <c:if test="${sessionScope.user != null}">
-        <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
-    </c:if>
-    <h1 class="header-titre">Résultats actuels de l'élection</h1>
-</header>
+<c:if test="${sessionScope.user == null}">
+    <% response.sendRedirect("index.html"); %>
+</c:if>
+<jsp:include page="WEB-INF/components/bonjour.jsp">
+    <jsp:param name="titre" value="Résultats actuels de l'élection"/>
+</jsp:include>
 <main id="contenu" class="wrapper">
-    <aside class="menu">
-        <h2>Menu</h2>
-        <ul>
-            <li><a href="vote.jsp">Voter</a></li>
-            <li><a href="ballot.jsp">Votre vote</a></li>
-            <li><a href="resultats.jsp">Résultats</a></li>
-            <li><a href="deco">Déconnexion</a></li>
-        </ul>
-    </aside>
+    <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
         <h2>Voici le résultat courant de l'élection</h2>
         <%-- jsp:useBean id="votes" scope="request" class="java.util.HashMap" /--%>
@@ -57,4 +49,5 @@
     </article>
 </main>
 </body>
+<%@include file="WEB-INF/components/footer.jsp" %>
 </html>
