@@ -20,6 +20,6 @@
                 <li><a href="index.html">Se connecter</a></li>
             </c:otherwise>
         </c:choose>
-        <li><a href="resultats.jsp">Résultats</a></li>
+        <li><a href="resultat">Résultats</a></li>
     </ul>
 </aside>
