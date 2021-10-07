@@ -33,7 +33,7 @@
             <li><a href="vote.jsp">Voter</a></li>
             <li><a href="ballot.jsp">Votre vote</a></li>
             <li><a href="resultats.jsp">Résultats</a></li>
-            <li><a href="Deco">Déconnexion</a></li>
+            <li><a href="deco">Déconnexion</a></li>
         </ul>
     </aside>
     <article class="contenu">
