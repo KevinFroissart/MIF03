@@ -18,7 +18,7 @@
 <c:if test="${sessionScope.user == null}">
     <% response.sendRedirect("index.html"); %>
 </c:if>
-<jsp:include page="WEB-INF/components/bonjour.jsp">
+<jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votez pour qui vous voulez"/>
 </jsp:include>
 <main id="contenu" class="wrapper">
@@ -26,9 +26,7 @@
     <article class="contenu">
         <form method="post" action="castVote">
             <label>Sélectionnez un candidat:</label>
-            <%
-                Map<String, Candidat> candidats = (Map<String, Candidat>) application.getAttribute("candidats");
-            %>
+            <% Map<String, Candidat> candidats = (Map<String, Candidat>) application.getAttribute("candidats"); %>
             <select name="candidat" id="selection">
                 <option value="">----</option>
                 <c:forEach items="<%= candidats.keySet()%>" var="nomCandidat">

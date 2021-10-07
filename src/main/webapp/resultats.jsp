@@ -6,13 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Bulletin" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.Candidat" %>
-<%@ page import="java.util.List" %>
-<jsp:useBean id="bulletins" type="java.util.List" beanName="bulletins" scope="application"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="votes" class="java.util.HashMap" scope="request" />
 <html>
 <head>
     <title>Vote</title>
@@ -22,28 +18,17 @@
 <c:if test="${sessionScope.user == null}">
     <% response.sendRedirect("index.html"); %>
 </c:if>
-<jsp:include page="WEB-INF/components/bonjour.jsp">
+<jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Résultats actuels de l'élection"/>
 </jsp:include>
 <main id="contenu" class="wrapper">
     <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
         <h2>Voici le résultat courant de l'élection</h2>
-        <%-- jsp:useBean id="votes" scope="request" class="java.util.HashMap" /--%>
-        <%
-            Map<String, Integer> votes = new HashMap<>();
-            for (String nomCandidat : ((Map<String, Candidat>) application.getAttribute("candidats")).keySet()) {
-                votes.put(nomCandidat, 0);
-            }
-            for (Bulletin bulletin : (List<Bulletin>) bulletins) {
-                int score = ((Map<String, Integer>) votes).get(bulletin.getCandidat().getNom());
-                votes.put(bulletin.getCandidat().getNom(), ++score);
-            }
-        %>
-
         <ul>
-            <c:forEach items="<%= votes.keySet()%>" var="nomCandidat">
-                <li><c:out value="${nomCandidat}"/> : <%= votes.get((String)pageContext.getAttribute("nomCandidat")) %> vote(s)</li>
+            <c:out value="<%= ((Map<String, Integer>) votes).size()%>"/>
+            <c:forEach items="<%= ((Map<String, Integer>) votes).keySet()%>" var="nomCandidat">
+                <li><c:out value="${nomCandidat}"/> : <%= ((Map<String, Integer>) votes).get((String)pageContext.getAttribute("nomCandidat")) %> vote(s)</li>
             </c:forEach>
         </ul>
     </article>

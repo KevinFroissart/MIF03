@@ -16,7 +16,7 @@
 <c:if test="${sessionScope.user == null}">
     <% response.sendRedirect("index.html"); %>
 </c:if>
-<jsp:include page="WEB-INF/components/bonjour.jsp">
+<jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votre preuve de vote"/>
 </jsp:include>
 <main id="contenu" class="wrapper">
