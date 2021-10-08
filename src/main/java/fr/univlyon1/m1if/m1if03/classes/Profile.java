@@ -21,8 +21,8 @@ public class Profile extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
-		if(utilisateur == null) {
-			String name = (String) request.getParameter("name");
+		if(utilisateur != null) {
+			String name = request.getParameter("name");
 			utilisateur.setNom(name);
 			response.sendRedirect("profile.jsp");
 		} else {
