@@ -21,6 +21,7 @@
         </c:choose>
         <li><a href="resultats">Résultats</a></li>
         <c:if test="${sessionScope.user != null}">
+            <li><a href="profile.jsp">Votre profil</a></li>
             <li><a href="deco">Déconnexion</a></li>
         </c:if>
     </ul>
