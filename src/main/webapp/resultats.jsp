@@ -15,9 +15,7 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<c:if test="${sessionScope.user == null}">
-    <% response.sendRedirect("index.html"); %>
-</c:if>
+<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Résultats actuels de l'élection"/>
 </jsp:include>

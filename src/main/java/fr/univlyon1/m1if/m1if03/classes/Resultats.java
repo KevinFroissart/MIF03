@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "Resultat", value = "/resultat")
-public class Resultat extends HttpServlet {
+@WebServlet(name = "Resultat", value = "/resultats")
+public class Resultats extends HttpServlet {
 
     Map<String, Integer> votes = null;
     Map<String, Ballot> ballots = null;

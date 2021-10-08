@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: kevin
@@ -6,7 +5,10 @@
   Time: 21:22
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<jsp:useBean id="ballots" scope="application" class="java.util.HashMap"/>
+<jsp:useBean id="bulletins" scope="application" class="java.util.ArrayList"/>
 <html>
 <head>
     <title>Vote</title>
@@ -14,7 +16,7 @@
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
-    <% response.sendRedirect("index.html"); %>
+    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page"); %>
 </c:if>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votre preuve de vote"/>
@@ -23,11 +25,16 @@
     <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
         <c:choose>
-            <c:when test="${sessionScope.user == null}"> <%-- TODO: remplacer par une methode qui permet de savoir si l'utilisateur a voté --%>
+            <c:when test="${sessionScope.user != null && ballots.get(sessionScope.user.login) == null}">
                 <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter </p>
             </c:when>
             <c:otherwise>
-                <p>Votre vote: </p>
+                <p>
+                    Votre vote:
+                    <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
+                            ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
+                </p>
+
                 <p>
                     <input type="submit" name="action" value="supprimer">
                 </p>
