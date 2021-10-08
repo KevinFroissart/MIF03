@@ -28,5 +28,4 @@ public class Deco extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 }
