@@ -32,7 +32,6 @@
                 <input type="submit" name="action" value="Modifier">
             </p>
         </form>
-
     </article>
 </main>
 </body>
