@@ -34,7 +34,6 @@ public class Resultats extends HttpServlet {
             for (String nomCandidat : candidats.keySet()) {
                 votes.put(nomCandidat, 0);
             }
-
             for (Bulletin bulletin : bulletins) {
                 int score = votes.get(bulletin.getCandidat().getNom());
                 votes.put(bulletin.getCandidat().getNom(), ++score);
@@ -45,6 +44,5 @@ public class Resultats extends HttpServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
-
     }
 }

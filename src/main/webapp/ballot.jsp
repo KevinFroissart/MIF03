@@ -34,7 +34,6 @@
                     <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
                             ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
                 </p>
-
                 <p>
                     <input type="submit" name="action" value="supprimer">
                 </p>
