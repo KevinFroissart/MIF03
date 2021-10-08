@@ -15,7 +15,6 @@ import java.util.Map;
 @WebServlet(name = "Resultat", value = "/resultats")
 public class Resultats extends HttpServlet {
 
-    Map<String, Integer> votes = null;
     Map<String, Ballot> ballots = null;
     List<Bulletin> bulletins = null;
 
@@ -31,16 +30,14 @@ public class Resultats extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
-            if(votes == null) {
-                votes = new HashMap<>();
-                for (String nomCandidat : candidats.keySet()) {
-                    votes.put(nomCandidat, 0);
-                }
-                for (Bulletin bulletin : bulletins) {
-                    int score = votes.get(bulletin.getCandidat().getNom());
-                    System.out.println(bulletin.getCandidat().getNom() + " : " + votes.get(bulletin.getCandidat().getNom()));
-                    votes.put(bulletin.getCandidat().getNom(), ++score);
-                }
+            Map<String, Integer> votes = new HashMap<>();
+            for (String nomCandidat : candidats.keySet()) {
+                votes.put(nomCandidat, 0);
+            }
+
+            for (Bulletin bulletin : bulletins) {
+                int score = votes.get(bulletin.getCandidat().getNom());
+                votes.put(bulletin.getCandidat().getNom(), ++score);
             }
             request.setAttribute("votes", votes);
             request.getRequestDispatcher("resultats.jsp").forward(request, response);
