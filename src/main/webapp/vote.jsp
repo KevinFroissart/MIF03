@@ -7,6 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${sessionScope.user == null}">
+    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page"); %>
+</c:if>
 <%@ page import="java.util.Map" %>
 <%@ page import="fr.univlyon1.m1if.m1if03.classes.Candidat" %>
 <html>
@@ -15,9 +18,6 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<c:if test="${sessionScope.user == null}">
-    <% response.sendRedirect("index.html"); %>
-</c:if>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votez pour qui vous voulez"/>
 </jsp:include>
