@@ -41,8 +41,7 @@ public class Resultat extends HttpServlet {
                     votes.put(bulletin.getCandidat().getNom(), ++score);
                 }
             }
-            System.out.println(votes.toString());
-            request.getServletContext().setAttribute("votes", votes);
+            request.setAttribute("votes", votes);
             request.getRequestDispatcher("resultats.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
             e.printStackTrace();

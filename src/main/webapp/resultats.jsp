@@ -26,7 +26,6 @@
     <article class="contenu">
         <h2>Voici le résultat courant de l'élection</h2>
         <ul>
-            <c:out value="<%= ((Map<String, Integer>) votes).size()%>"/>
             <c:forEach items="<%= ((Map<String, Integer>) votes).keySet()%>" var="nomCandidat">
                 <li><c:out value="${nomCandidat}"/> : <%= ((Map<String, Integer>) votes).get((String)pageContext.getAttribute("nomCandidat")) %> vote(s)</li>
             </c:forEach>
