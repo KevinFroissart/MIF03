@@ -23,6 +23,7 @@
 <main id="contenu" class="wrapper">
     <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
+        <form method="post" action="DeleteVote">
         <c:choose>
             <c:when test="${sessionScope.user != null && ballots.get(sessionScope.user.login) == null}">
                 <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter </p>
@@ -39,6 +40,7 @@
                 </p>
             </c:otherwise>
         </c:choose>
+        </form>
     </article>
 </main>
 </body>
