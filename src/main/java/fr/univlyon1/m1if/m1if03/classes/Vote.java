@@ -44,7 +44,6 @@ public class Vote extends HttpServlet {
 			request.setAttribute("bulletins", bulletins);
 			request.setAttribute("ballots", ballots);
 			request.getRequestDispatcher("ballot.jsp").forward(request, response);
-			//response.sendRedirect("ballot.jsp");
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -54,5 +53,4 @@ public class Vote extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.sendRedirect("index.html");
 	}
-
 }
