@@ -38,6 +38,7 @@ public class Resultats extends HttpServlet {
                 }
                 for (Bulletin bulletin : bulletins) {
                     int score = votes.get(bulletin.getCandidat().getNom());
+                    System.out.println(bulletin.getCandidat().getNom() + " : " + votes.get(bulletin.getCandidat().getNom()));
                     votes.put(bulletin.getCandidat().getNom(), ++score);
                 }
             }

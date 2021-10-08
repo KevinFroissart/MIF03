@@ -28,21 +28,30 @@ public class Vote extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
-		String nomCandidat = request.getParameter("candidat");
-
-		Candidat candidat = candidats.get(nomCandidat);
-		Bulletin bulletin = new Bulletin(candidat);
-		bulletins.add(bulletin);
-		Ballot ballot = new Ballot(bulletin);
-
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
-		ballots.put(utilisateur.getLogin(), ballot);
+		if(utilisateur != null) {
+			request.setCharacterEncoding("UTF-8");
+			Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
+			String nomCandidat = request.getParameter("candidat");
 
-		request.getServletContext().setAttribute("bulletin", bulletin);
-		request.getServletContext().setAttribute("ballot", ballot);
-		request.getRequestDispatcher("ballot.jsp").forward(request, response);
+			Candidat candidat = candidats.get(nomCandidat);
+			Bulletin bulletin = new Bulletin(candidat);
+			bulletins.add(bulletin);
+			Ballot ballot = new Ballot(bulletin);
+			ballots.put(utilisateur.getLogin(), ballot);
+
+			request.getServletContext().setAttribute("bulletin", bulletin);
+			request.getServletContext().setAttribute("ballot", ballot);
+			request.getRequestDispatcher("ballot.jsp").forward(request, response);
+		} else {
+			response.sendRedirect("index.html");
+		}
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.sendRedirect("index.html");
 	}
 
 }
