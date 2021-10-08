@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +22,11 @@ public class CandidatListGenerator {
         List<Item> items = mapper.readValue(new URL("https://perso.liris.cnrs.fr/lionel.medini/enseignement/M1IF03/TP/candidats.json"), javaType);
 
         // Création d'une liste de candidats
-        Map<String, Candidat> resultat = new HashMap<>();
+        Map<String, Candidat> resultat = new LinkedHashMap<>();
         for (Item i : items) {
             resultat.put(i.getNom(), new Candidat(i.getPrenom(), i.getNom()));
         }
+        resultat.put("Vote Blanc", new Candidat("", "Vote Blanc"));
         return resultat;
     }
 

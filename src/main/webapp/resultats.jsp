@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="votes" class="java.util.HashMap" scope="request" />
+<jsp:useBean id="votes" class="java.util.LinkedHashMap" scope="request" />
 <html>
 <head>
     <title>Vote</title>
