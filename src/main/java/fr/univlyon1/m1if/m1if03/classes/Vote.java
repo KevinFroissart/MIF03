@@ -41,9 +41,10 @@ public class Vote extends HttpServlet {
 			Ballot ballot = new Ballot(bulletin);
 			ballots.put(utilisateur.getLogin(), ballot);
 
-			request.getServletContext().setAttribute("bulletin", bulletin);
-			request.getServletContext().setAttribute("ballot", ballot);
+			request.setAttribute("bulletin", bulletin);
+			request.setAttribute("ballots", ballots);
 			request.getRequestDispatcher("ballot.jsp").forward(request, response);
+			//response.sendRedirect("ballot.jsp");
 		} else {
 			response.sendRedirect("index.html");
 		}

@@ -8,7 +8,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="ballots" scope="application" class="java.util.HashMap"/>
-<jsp:useBean id="bulletins" scope="application" class="java.util.ArrayList"/>
 <html>
 <head>
     <title>Vote</title>
