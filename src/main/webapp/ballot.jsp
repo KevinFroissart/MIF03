@@ -15,7 +15,7 @@
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
-    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page"); %>
+    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page."); %>
 </c:if>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votre preuve de vote"/>
@@ -23,23 +23,23 @@
 <main id="contenu" class="wrapper">
     <%@include file="WEB-INF/components/menu.jsp" %>
     <article class="contenu">
-        <form method="post" action="DeleteVote">
         <c:choose>
             <c:when test="${sessionScope.user != null && ballots.get(sessionScope.user.login) == null}">
-                <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter </p>
+                <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter.</p>
             </c:when>
             <c:otherwise>
-                <p>
-                    Votre vote:
-                    <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
-                            ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
-                </p>
-                <p>
-                    <input type="submit" name="action" value="supprimer">
-                </p>
+                <form method="post" action="deleteVote">
+                    <p>
+                        Votre vote:
+                        <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
+                                ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
+                    </p>
+                    <p>
+                        <input type="submit" name="action" value="supprimer">
+                    </p>
+                </form>
             </c:otherwise>
         </c:choose>
-        </form>
     </article>
 </main>
 </body>

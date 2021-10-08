@@ -5,16 +5,16 @@
   Time: 15:25
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Profil</title>
+    <title>Profile</title>
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
-    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page"); %>
+    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page."); %>
 </c:if>
 <% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="WEB-INF/components/header.jsp">
