@@ -31,7 +31,6 @@ public class Vote extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
 		if(utilisateur != null) {
-			request.setCharacterEncoding("UTF-8");
 			Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
 			String nomCandidat = request.getParameter("candidat");
 

@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="ballots" scope="application" class="java.util.LinkedHashMap"/>
 <html>
 <head>
@@ -43,5 +42,5 @@
     </article>
 </main>
 </body>
-<%@include file="WEB-INF/components/footer.jsp" %>
+<%@include file="WEB-INF/components/footer.html" %>
 </html>
