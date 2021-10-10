@@ -5,7 +5,6 @@
   Time: 13:14
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="votes" class="java.util.LinkedHashMap" scope="request" />
@@ -15,7 +14,6 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<% request.setCharacterEncoding("utf-8"); %>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Résultats actuels de l'élection"/>
 </jsp:include>
@@ -31,5 +29,5 @@
     </article>
 </main>
 </body>
-<%@include file="WEB-INF/components/footer.jsp" %>
+<%@include file="WEB-INF/components/footer.html" %>
 </html>

@@ -7,3 +7,5 @@ des candidats.
 
 Nous avons aussi ajouté le fait qu'un utilisateur ayant déjà voté ne puisse pas revoter
 en affichant un message personnalisé qui propose une redirection sur ballot.jsp
+
+L'encoding UTF-8 est défini dans le fichier web.xml
