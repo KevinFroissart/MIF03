@@ -1,30 +1,34 @@
 package fr.univlyon1.m1if.m1if03.classes.servlets;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
-import fr.univlyon1.m1if.m1if03.utils.CandidatListGenerator;
 
-@WebServlet(name = "login", value = "/login", loadOnStartup = 1)
-public class AuthFilter extends HttpServlet {
+@WebFilter(filterName = "/login")
+public class FiltreAuthentification extends HttpFilter {
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init(FilterConfig config) throws ServletException {
 		super.init(config);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		try {
 			String login = request.getParameter("login");
+			System.out.println(request.getRequestURI());
+			System.out.println(request.getPathInfo());
 			if (login != null && !login.equals("")) {
+				chain.doFilter(request, response);
+			} else if(request.getPathInfo().equals("index.html")){
 				HttpSession session = request.getSession(true);
 				session.setAttribute("user", new User(login,
 						request.getParameter("nom") != null ? request.getParameter("nom") : "",
@@ -38,5 +42,4 @@ public class AuthFilter extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 }
