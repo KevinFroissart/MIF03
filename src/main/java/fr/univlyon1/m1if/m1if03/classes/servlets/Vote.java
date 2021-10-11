@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.servlets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -11,6 +11,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import fr.univlyon1.m1if.m1if03.classes.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.User;
 
 @WebServlet(name = "Vote", value = "/castVote")
 public class Vote extends HttpServlet {

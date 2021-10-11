@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.servlets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import fr.univlyon1.m1if.m1if03.classes.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.Candidat;
 
 @WebServlet(name = "Resultat", value = "/resultats")
 public class Resultats extends HttpServlet {
