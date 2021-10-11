@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.servlets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import fr.univlyon1.m1if.m1if03.classes.User;
 
 @WebServlet(name = "Profile", value = "/profile")
 public class Profile extends HttpServlet {
