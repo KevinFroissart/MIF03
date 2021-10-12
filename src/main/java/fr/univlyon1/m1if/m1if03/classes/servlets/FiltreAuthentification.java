@@ -4,7 +4,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import java.io.IOException;
 
 import fr.univlyon1.m1if.m1if03.classes.User;
 
-@WebFilter(filterName = "/login")
+@WebFilter(filterName = "/LoginFilter")
 public class FiltreAuthentification extends HttpFilter {
 
 	public void init(FilterConfig config) throws ServletException {
@@ -23,17 +22,25 @@ public class FiltreAuthentification extends HttpFilter {
 	@Override
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {
+			request.setCharacterEncoding("UTF-8");
+			HttpSession session = request.getSession(true);
 			String login = request.getParameter("login");
-			System.out.println(request.getRequestURI());
-			System.out.println(request.getPathInfo());
-			if (login != null && !login.equals("")) {
+			User utilisateur = (User) session.getAttribute("user");
+			String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
+
+			boolean utilisateurConnecte = utilisateur != null && !utilisateur.getLogin().equals("");
+			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/vote.jsp");
+			boolean ressourceStatic = uri.contains(".css") || uri.equals("/") || uri.equals("/index.html");
+			boolean ressourceAutorisee = uri.equals("/resultats.jsp") || uri.equals("/resultats");
+			boolean loginNonNull = login != null && !login.equals("");
+
+			if (utilisateurConnecte || ressourceStatic || ressourceAutorisee) {
 				chain.doFilter(request, response);
-			} else if(request.getPathInfo().equals("index.html")){
-				HttpSession session = request.getSession(true);
+			} else if(provientFormulaireAuth && loginNonNull){
 				session.setAttribute("user", new User(login,
 						request.getParameter("nom") != null ? request.getParameter("nom") : "",
 						request.getParameter("admin") != null && request.getParameter("admin").equals("on")));
-				request.getRequestDispatcher("vote.jsp").forward(request, response);
+				chain.doFilter(request, response);
 			} else {
 				response.sendRedirect("index.html");
 			}
