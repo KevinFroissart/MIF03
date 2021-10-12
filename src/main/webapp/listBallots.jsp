@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="static/vote.css">
 </head>
 <body>
-<jsp:include page="WEB-INF/components/title.jsp?title=Liste des ballots (admin)"/>
+<%--<jsp:include page="WEB-INF/components/title.jsp?title=Liste des ballots (admin)"/>--%>
 <main id="contenu" class="wrapper">
     <jsp:include page="WEB-INF/components/menu.jsp"/>
     <article class="contenu">
