@@ -12,7 +12,7 @@
         <c:choose>
             <c:when test="${sessionScope.user != null}">
                 <li><a href="vote.jsp">Voter</a></li>
-                <li><a href="ballot.jsp">Votre vote</a></li>
+                <li><a href="listBallots.jsp">Votre vote</a></li>
             </c:when>
             <c:otherwise>
                 <li><a href="index.html">Se connecter</a></li>
