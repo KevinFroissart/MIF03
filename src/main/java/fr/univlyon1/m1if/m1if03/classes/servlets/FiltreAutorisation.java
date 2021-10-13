@@ -12,24 +12,20 @@ import java.io.IOException;
 
 @WebFilter(filterName = "/AutorisationFilter")
 public class FiltreAutorisation extends HttpFilter {
-    public void init(FilterConfig config) throws ServletException {
-    }
 
+    public void init(FilterConfig config) throws ServletException {
+        super.init(config);
+    }
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
         HttpSession session = request.getSession(true);
-        User user = (User) session.getAttribute("user");
+        User utilisateur = (User) session.getAttribute("user");
 
-        if (session.getAttribute("user") == null){
+        if(utilisateur.isAdmin()){
             chain.doFilter(request, response);
-        } else if(user.isAdmin()){
-            request.getRequestDispatcher("listBallots.jsp").forward(request,response);
-
         } else {
-            request.getRequestDispatcher("ballot.jsp").forward(request, response);
-
+            response.sendRedirect("ballot.jsp");
         }
     }
 }
