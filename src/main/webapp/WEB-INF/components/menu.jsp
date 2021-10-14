@@ -15,7 +15,7 @@
                 <li><a href="listBallots">Votre vote</a></li>
             </c:when>
             <c:otherwise>
-                <li><a href="index.html">Se connecter</a></li>
+                <li><a href="../index.html">Se connecter</a></li>
             </c:otherwise>
         </c:choose>
         <li><a href="resultats">Résultats</a></li>

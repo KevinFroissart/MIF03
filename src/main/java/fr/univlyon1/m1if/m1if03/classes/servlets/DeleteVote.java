@@ -11,7 +11,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 
-@WebServlet(name = "DeleteVote", value = "/deleteVote")
+@WebServlet(name = "DeleteVote", value = "/election/deleteVote")
 public class DeleteVote extends HttpServlet {
 
     Map<String, Ballot> ballots = null;
@@ -34,14 +34,14 @@ public class DeleteVote extends HttpServlet {
             Bulletin bulletin = ballot.getBulletin();
             bulletins.remove(bulletin);
             ballots.remove(utilisateur.getLogin());
-            request.getRequestDispatcher("ballot.jsp").forward(request, response);
+            request.getRequestDispatcher("../ballot.jsp").forward(request, response);
         } else {
-            response.sendRedirect("index.html");
+            response.sendRedirect("../index.html");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("index.html");
+        response.sendRedirect("../index.html");
     }
 }

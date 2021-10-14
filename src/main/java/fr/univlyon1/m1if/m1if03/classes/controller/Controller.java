@@ -23,21 +23,15 @@ import fr.univlyon1.m1if.m1if03.classes.model.User;
 @WebServlet(name = "Controller")
 public class Controller extends HttpServlet {
 
-	//Map<String, Ballot> ballots = new HashMap<>();
-	//List<Bulletin> bulletins = new ArrayList<>();
-
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		ServletContext context = config.getServletContext();
-		//ballots = (Map<String, Ballot>) context.getAttribute("ballots");
-		//bulletins = (List<Bulletin>) context.getAttribute("bulletins");
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String url = request.getRequestURL().toString();
-		System.out.println("post : " + url);
+		System.out.println("get : " + url);
 
 		if(url.endsWith("vote")) {
 			request.getRequestDispatcher("../vote.jsp").forward(request, response); //OK
@@ -58,10 +52,9 @@ public class Controller extends HttpServlet {
 			}
 			request.setAttribute("votes", votes);
 			request.getRequestDispatcher("../resultats.jsp").forward(request, response); // OK
-		} else if (url.endsWith("listBallots")) {
+		} else if (url.endsWith("listBallots")) { // OK
+			System.out.println("get list ballots");
 			request.getRequestDispatcher("../listBallots.jsp").forward(request, response);
-		} else {
-			request.getRequestDispatcher(url).forward(request, response);
 		}
 	}
 
@@ -71,41 +64,41 @@ public class Controller extends HttpServlet {
 		String url = request.getRequestURL().toString();
 		System.out.println("post : " + url);
 
-		if(url.endsWith("vote")) {
+		if(url.endsWith("vote")) { // OK
+			boolean candidatNull = request.getParameter("candidat") == null
+					|| request.getParameter("candidat").equals("")
+					|| request.getParameter("candidat").equals("null");
 
-			if(request.getParameter("candidat") == null || request.getParameter("candidat").equals("")){
+			if(candidatNull){
 				request.getRequestDispatcher("../vote.jsp").forward(request, response);
-			}
+			} else {
+				Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
+				Map<String, Ballot> ballots = (Map<String, Ballot>) request.getServletContext().getAttribute("ballots");
+				List<Bulletin> bulletins = (List<Bulletin>) request.getServletContext().getAttribute("bulletins");
+				HttpSession session = request.getSession(true);
+				User utilisateur = (User) session.getAttribute("user");
 
-			Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
-			Map<String, Ballot> ballots = (Map<String, Ballot>) request.getServletContext().getAttribute("ballots");
-			List<Bulletin> bulletins = (List<Bulletin>) request.getServletContext().getAttribute("bulletins");
+				String nomCandidat = request.getParameter("candidat");
+				Candidat candidat = candidats.get(nomCandidat);
+				Bulletin bulletin = new Bulletin(candidat);
+				bulletins.add(bulletin);
+				Ballot ballot = new Ballot(bulletin);
+				ballots.put(utilisateur.getLogin(), ballot);
+
+				request.setAttribute("bulletins", bulletins);
+				request.setAttribute("ballots", ballots);
+				request.getRequestDispatcher("../ballot.jsp").forward(request, response);
+			}
+		} else if (url.endsWith("user")) { // OK
 			HttpSession session = request.getSession(true);
 			User utilisateur = (User) session.getAttribute("user");
-
-			String nomCandidat = request.getParameter("candidat");
-			Candidat candidat = candidats.get(nomCandidat);
-			Bulletin bulletin = new Bulletin(candidat);
-			bulletins.add(bulletin);
-			Ballot ballot = new Ballot(bulletin);
-			ballots.put(utilisateur.getLogin(), ballot);
-
-			request.setAttribute("bulletins", bulletins);
-			request.setAttribute("ballots", ballots);
-			request.getRequestDispatcher("../ballot.jsp").forward(request, response);
-		} else if (url.endsWith("user")) {
+			String name = request.getParameter("name");
+			utilisateur.setNom(name);
 			request.getRequestDispatcher("../profile.jsp").forward(request, response);
-		} else if (url.endsWith("resultats")) {
+		} else if (url.endsWith("resultats")) { // OK
 			request.getRequestDispatcher("../resultats").forward(request, response);
-		} else if (url.endsWith("listBallots")) {
+		} else if (url.endsWith("listBallots")) { // OK
 			request.getRequestDispatcher("../listBallots.jsp").forward(request, response);
-		} else {
-			request.getRequestDispatcher(url).forward(request, response);
 		}
-
-		//request.getRequestDispatcher(url).include(request, response);
 	}
-
-
-
-	}
+}

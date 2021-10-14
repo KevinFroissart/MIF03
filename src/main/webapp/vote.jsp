@@ -16,7 +16,7 @@
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
-    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page."); %>
+    <% response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous devez être connecté pour accéder à cette page."); %>
 </c:if>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Votez pour qui vous voulez"/>
@@ -26,7 +26,7 @@
     <article class="contenu">
         <c:choose>
             <c:when test="${ballots.get(sessionScope.user.login) != null}">
-                <p>Vous avez déjà voté. Vous pouvez consulter votre vote sur <a href="../ballot.jsp">cette page</a>. </p>
+                <p>Vous avez déjà voté. Vous pouvez consulter votre vote sur <a href="listBallots">cette page</a>. </p>
             </c:when>
             <c:otherwise>
                 <form method="post" action="vote">

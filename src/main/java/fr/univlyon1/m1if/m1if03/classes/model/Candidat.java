@@ -15,4 +15,12 @@ public class Candidat {
     public String getNom() {
         return nom;
     }
+
+    @Override
+    public String toString() {
+        return "Candidat{" +
+                "prenom='" + prenom + '\'' +
+                ", nom='" + nom + '\'' +
+                '}';
+    }
 }

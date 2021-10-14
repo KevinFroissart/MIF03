@@ -13,7 +13,7 @@
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
-    <% response.sendError(403, "Vous devez être connecté pour accéder à cette page."); %>
+    <% response.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous devez être connecté pour accéder à cette page."); %>
 </c:if>
 <jsp:include page="WEB-INF/components/header.jsp">
     <jsp:param name="titre" value="Mettre à jour mon profil"/>
@@ -23,7 +23,7 @@
     <article class="contenu">
         <h2>Nom actuel : ${sessionScope.user.nom}</h2>
         <br/>
-        <form method="post" action="profile">
+        <form method="post" action="user">
             <h2>Modifier mon nom:</h2>
             <p>
                 <input type="text" id="name" name="name" required>
