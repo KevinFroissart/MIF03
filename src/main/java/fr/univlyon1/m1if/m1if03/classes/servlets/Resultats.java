@@ -12,9 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.univlyon1.m1if.m1if03.classes.Ballot;
-import fr.univlyon1.m1if.m1if03.classes.Bulletin;
-import fr.univlyon1.m1if.m1if03.classes.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 
 @WebServlet(name = "Resultat", value = "/resultats")
 public class Resultats extends HttpServlet {
@@ -43,7 +43,7 @@ public class Resultats extends HttpServlet {
                 votes.put(bulletin.getCandidat().getNom(), ++score);
             }
             request.setAttribute("votes", votes);
-            request.getRequestDispatcher("resultats.jsp").forward(request, response);
+            request.getRequestDispatcher("../resultats.jsp").forward(request, response);
         } catch (IOException | ServletException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

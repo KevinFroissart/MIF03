@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import fr.univlyon1.m1if.m1if03.classes.Ballot;
-import fr.univlyon1.m1if.m1if03.classes.Bulletin;
-import fr.univlyon1.m1if.m1if03.classes.Candidat;
-import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 @WebServlet(name = "Vote", value = "/castVote")
 public class Vote extends HttpServlet {

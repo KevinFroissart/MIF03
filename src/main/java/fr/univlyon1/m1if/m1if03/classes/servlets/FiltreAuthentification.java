@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 @WebFilter(filterName = "/LoginFilter")
 public class FiltreAuthentification extends HttpFilter {
@@ -27,9 +27,10 @@ public class FiltreAuthentification extends HttpFilter {
 			String login = request.getParameter("login");
 			User utilisateur = (User) session.getAttribute("user");
 			String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
+			System.out.println(uri);
 
 			boolean utilisateurConnecte = utilisateur != null && !utilisateur.getLogin().equals("");
-			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/vote.jsp");
+			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/election/vote");
 			boolean ressourceStatic = uri.contains(".css") || uri.equals("/") || uri.equals("/index.html");
 			boolean ressourceAutorisee = uri.equals("/resultats.jsp") || uri.equals("/resultats");
 			boolean loginNonNull = login != null && !login.equals("");

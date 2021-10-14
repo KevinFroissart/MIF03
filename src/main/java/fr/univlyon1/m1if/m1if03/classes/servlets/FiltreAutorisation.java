@@ -1,6 +1,6 @@
 package fr.univlyon1.m1if.m1if03.classes.servlets;
 
-import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;

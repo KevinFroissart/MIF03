@@ -16,6 +16,18 @@
       <page-encoding>UTF-8</page-encoding>
     </jsp-property-group>
   </jsp-config>
+  <servlet>
+    <servlet-name>Controller</servlet-name>
+    <servlet-class>fr.univlyon1.m1if.m1if03.classes.controller.Controller</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Controller</servlet-name>
+    <url-pattern>/election/resultats</url-pattern>
+    <url-pattern>/election/user</url-pattern>
+    <url-pattern>/election/vote</url-pattern>
+    <url-pattern>/election/listBallots</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>LoginFilter</filter-name>
     <filter-class>fr.univlyon1.m1if.m1if03.classes.servlets.FiltreAuthentification</filter-class>

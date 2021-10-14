@@ -1,8 +1,8 @@
 package fr.univlyon1.m1if.m1if03.classes.servlets;
 
-import fr.univlyon1.m1if.m1if03.classes.Ballot;
-import fr.univlyon1.m1if.m1if03.classes.Bulletin;
-import fr.univlyon1.m1if.m1if03.classes.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 import fr.univlyon1.m1if.m1if03.utils.CandidatListGenerator;
 
 import javax.servlet.ServletConfig;
