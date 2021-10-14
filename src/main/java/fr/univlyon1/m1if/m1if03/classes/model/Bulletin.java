@@ -10,4 +10,11 @@ public class Bulletin {
     public Candidat getCandidat() {
         return candidat;
     }
+
+    @Override
+    public String toString() {
+        return "Bulletin{" +
+                "candidat=" + candidat +
+                '}';
+    }
 }

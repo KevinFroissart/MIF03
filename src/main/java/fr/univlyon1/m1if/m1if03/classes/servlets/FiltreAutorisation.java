@@ -21,11 +21,14 @@ public class FiltreAutorisation extends HttpFilter {
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
         User utilisateur = (User) session.getAttribute("user");
-
+        String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
+        System.out.println(uri);
+        System.out.println("filtre autorisation");
         if(utilisateur.isAdmin()){
             chain.doFilter(request, response);
         } else {
-            response.sendRedirect("ballot.jsp");
+            request.getRequestDispatcher("../ballot.jsp").forward(request, response);
+            //response.sendRedirect("../ballot.jsp"); C'est ce qu'on devrait mettre norlmalement mais impossible de faire fonctionner le CSS avec cette redirection
         }
     }
 }

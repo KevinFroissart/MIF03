@@ -21,6 +21,7 @@ public class FiltreAuthentification extends HttpFilter {
 
 	@Override
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		System.out.println("filtre auth");
 		try {
 			request.setCharacterEncoding("UTF-8");
 			HttpSession session = request.getSession(true);
@@ -31,8 +32,8 @@ public class FiltreAuthentification extends HttpFilter {
 
 			boolean utilisateurConnecte = utilisateur != null && !utilisateur.getLogin().equals("");
 			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/election/vote");
-			boolean ressourceStatic = uri.contains(".css") || uri.equals("/") || uri.equals("/index.html");
-			boolean ressourceAutorisee = uri.equals("/resultats.jsp") || uri.equals("/resultats");
+			boolean ressourceStatic = uri.contains(".css") || uri.equals("/") || uri.endsWith("/index.html");
+			boolean ressourceAutorisee = uri.endsWith("/resultats.jsp") || uri.endsWith("/resultats");
 			boolean loginNonNull = login != null && !login.equals("");
 
 			if (utilisateurConnecte || ressourceStatic || ressourceAutorisee) {
@@ -43,6 +44,7 @@ public class FiltreAuthentification extends HttpFilter {
 						request.getParameter("admin") != null && request.getParameter("admin").equals("on")));
 				chain.doFilter(request, response);
 			} else {
+				System.out.println("redirect");
 				response.sendRedirect("index.html");
 			}
 		} catch (IOException e) {
