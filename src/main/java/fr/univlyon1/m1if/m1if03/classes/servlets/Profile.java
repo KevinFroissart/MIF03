@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 @WebServlet(name = "Profile", value = "/profile")
 public class Profile extends HttpServlet {

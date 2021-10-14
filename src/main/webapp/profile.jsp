@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Profile</title>
-    <link rel="stylesheet" type="text/css" href="static/vote.css">
+    <link rel="stylesheet" type="text/css" href="../static/vote.css">
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">

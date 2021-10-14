@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.User" %><%--
+<%@ page import="fr.univlyon1.m1if.m1if03.classes.model.User" %><%--
   Created by IntelliJ IDEA.
   User: Lionel
   Date: 11/10/2021
@@ -20,7 +20,7 @@
 <html>
 <head>
     <title>Liste des ballots (admin)</title>
-    <link rel="stylesheet" type="text/css" href="static/vote.css">
+    <link rel="stylesheet" type="text/css" href="../static/vote.css">
 </head>
 <body>
 <%--<jsp:include page="WEB-INF/components/title.jsp?title=Liste des ballots (admin)"/>--%>

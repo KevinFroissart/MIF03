@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Vote</title>
-    <link rel="stylesheet" type="text/css" href="static/vote.css">
+    <link rel="stylesheet" type="text/css" href="../static/vote.css">
 </head>
 <body>
 <c:if test="${sessionScope.user == null}">
@@ -24,7 +24,7 @@
     <article class="contenu">
         <c:choose>
             <c:when test="${sessionScope.user != null && ballots.get(sessionScope.user.login) == null}">
-                <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote.jsp">cette page</a> pour voter.</p>
+                <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="../vote.jsp">cette page</a> pour voter.</p>
             </c:when>
             <c:otherwise>
                 <form method="post" action="deleteVote">
