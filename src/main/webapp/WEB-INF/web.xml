@@ -9,6 +9,7 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         version="3.0">
   <display-name>Archetype Created Web Application</display-name>
+
   <jsp-config>
     <jsp-property-group>
       <url-pattern>*.html</url-pattern>
@@ -16,6 +17,7 @@
       <page-encoding>UTF-8</page-encoding>
     </jsp-property-group>
   </jsp-config>
+
   <servlet>
     <servlet-name>Controller</servlet-name>
     <servlet-class>fr.univlyon1.m1if.m1if03.classes.controller.Controller</servlet-class>
@@ -28,6 +30,7 @@
     <url-pattern>/election/vote</url-pattern>
     <url-pattern>/election/listBallots</url-pattern>
   </servlet-mapping>
+
   <filter>
     <filter-name>LoginFilter</filter-name>
     <filter-class>fr.univlyon1.m1if.m1if03.classes.filter.FiltreAuthentification</filter-class>

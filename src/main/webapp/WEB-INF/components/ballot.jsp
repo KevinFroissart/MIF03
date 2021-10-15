@@ -7,7 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="header.jsp?header=Ballot&titre=Votre preuve de vote"/>
-<%response.setIntHeader("Refresh", 5);%>
+<%response.setIntHeader("Refresh", 10);%>
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
     <article class="contenu">
