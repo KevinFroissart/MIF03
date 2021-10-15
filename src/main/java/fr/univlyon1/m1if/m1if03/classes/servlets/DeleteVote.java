@@ -27,17 +27,19 @@ public class DeleteVote extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String login = request.getParameter("user");
+        Ballot ballot = ballots.get(login);
+        Bulletin bulletin = ballot.getBulletin();
+        bulletins.remove(bulletin);
+        ballots.remove(login);
+
         HttpSession session = request.getSession(true);
         User utilisateur = (User) session.getAttribute("user");
-        if(utilisateur != null) {
-            Ballot ballot = ballots.get(utilisateur.getLogin());
-            Bulletin bulletin = ballot.getBulletin();
-            bulletins.remove(bulletin);
-            ballots.remove(utilisateur.getLogin());
-            request.getRequestDispatcher("../ballot.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("../index.html");
-        }
+        request.getRequestDispatcher(
+                utilisateur.isAdmin()
+                ? "../WEB-INF/components/listBallots.jsp"
+                : "../WEB-INF/components/ballots.jsp")
+                .forward(request, response);
     }
 
     @Override
