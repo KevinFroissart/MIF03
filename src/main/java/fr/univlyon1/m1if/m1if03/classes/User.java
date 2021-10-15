@@ -7,6 +7,15 @@ public class User {
     private String nom;
     private final boolean admin;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", nom='" + nom + '\'' +
+                ", admin=" + admin +
+                '}';
+    }
+
     public User(String login, String nom, boolean admin) {
         this.login = login;
         this.nom = nom;

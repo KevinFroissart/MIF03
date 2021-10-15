@@ -21,9 +21,10 @@ public class FiltreAutorisation extends HttpFilter {
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
         User utilisateur = (User) session.getAttribute("user");
-
         if(utilisateur.isAdmin()){
+            System.out.println("is admin");
             chain.doFilter(request, response);
+
         } else {
             response.sendRedirect("ballot.jsp");
         }
