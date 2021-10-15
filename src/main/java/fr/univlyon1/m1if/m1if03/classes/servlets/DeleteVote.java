@@ -38,7 +38,7 @@ public class DeleteVote extends HttpServlet {
         request.getRequestDispatcher(
                 utilisateur.isAdmin()
                 ? "../WEB-INF/components/listBallots.jsp"
-                : "../WEB-INF/components/ballots.jsp")
+                : "../WEB-INF/components/ballot.jsp")
                 .forward(request, response);
     }
 
