@@ -8,6 +8,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="header.jsp?header=Ballot&titre=Votre preuve de vote"/>
+<%  response.setIntHeader("Refresh", 5); %>
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
     <article class="contenu">
@@ -21,6 +22,9 @@
                         Votre vote:
                         <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
                                 ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
+                    </p>
+                    <p>
+                        ${ballots.size()}
                     </p>
                     <p>
                         <input type="hidden" name="user" value="${sessionScope.user.login}">
