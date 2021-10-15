@@ -21,14 +21,13 @@ public class Controller extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		if(url.endsWith("vote")) {
-			request.getRequestDispatcher("../vote.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerVote").forward(request, response);
 		} else if (url.endsWith("user")) {
-			request.getRequestDispatcher("../profile.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerUser").forward(request, response);
 		} else if (url.endsWith("resultats")) {
-			request.getRequestDispatcher("/resultats").include(request, response);
-			request.getRequestDispatcher("../resultats.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerResultats").forward(request, response);
 		} else if (url.endsWith("listBallots")) {
-			request.getRequestDispatcher("../listBallots.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerListBallots").forward(request, response);
 		}
 	}
 
@@ -37,22 +36,13 @@ public class Controller extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		if(url.endsWith("vote")) {
-			boolean candidatNull = request.getParameter("candidat") == null
-					|| request.getParameter("candidat").equals("")
-					|| request.getParameter("candidat").equals("null");
-			if(candidatNull){
-				request.getRequestDispatcher("../vote.jsp").forward(request, response);
-			} else {
-				request.getRequestDispatcher("/castVote").include(request, response);
-				request.getRequestDispatcher("../ballot.jsp").forward(request, response);
-			}
+			request.getRequestDispatcher("ControllerVote").forward(request, response);
 		} else if (url.endsWith("user")) {
-			request.getRequestDispatcher("/profile").include(request, response);
-			request.getRequestDispatcher("../profile.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerUser").forward(request, response);
 		} else if (url.endsWith("resultats")) {
-			request.getRequestDispatcher("../resultats").forward(request, response);
+			request.getRequestDispatcher("ControllerResultats").forward(request, response);
 		} else if (url.endsWith("listBallots")) {
-			request.getRequestDispatcher("../listBallots.jsp").forward(request, response);
+			request.getRequestDispatcher("ControllerListBallots").forward(request, response);
 		}
 	}
 }

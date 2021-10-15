@@ -24,7 +24,7 @@ public class FiltreAutorisation extends HttpFilter {
         if(utilisateur.isAdmin()){
             chain.doFilter(request, response);
         } else {
-            request.getRequestDispatcher("../ballot.jsp").forward(request, response);
+            request.getRequestDispatcher("../WEB-INF/components/ballot.jsp").forward(request, response);
         }
     }
 }
