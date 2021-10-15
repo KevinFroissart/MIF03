@@ -18,12 +18,12 @@ public class ControllerUser extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		request.getRequestDispatcher("../WEB-INF/components/profile.jsp").forward(request, response);
+		request.getRequestDispatcher("../WEB-INF/components/profil.jsp").forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		request.getRequestDispatcher("/profile").include(request, response);
-		request.getRequestDispatcher("../WEB-INF/components/profile.jsp").forward(request, response);
+		request.getRequestDispatcher("/profil").include(request, response);
+		request.getRequestDispatcher("../WEB-INF/components/profil.jsp").forward(request, response);
 	}
 }
