@@ -20,6 +20,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.User;
 public class FiltreETag extends HttpFilter {
 
 	String ballotString = "";
+	String status = "";
 	int votes = 0;
 
 	@Override
@@ -35,27 +36,31 @@ public class FiltreETag extends HttpFilter {
 		List<Bulletin> bulletins = (List<Bulletin>) request.getServletContext().getAttribute("bulletins");
 
 		votes = bulletins.size();
-		if(utilisateur != null && ballots.get(utilisateur.getLogin()) != null) {
-			ballotString = ballots.get(utilisateur.getLogin()).getBulletin().getCandidat().getNom();
+
+		// Permet aussi de gérer le cas où l'utilisateur se déconnecte et souhaite
+		// accéder à la page des résultats. On change le ETag de manière à ce que le menu affiché soit mit à jour.
+		if (utilisateur != null) {
+			status = "co";
+			if (ballots.get(utilisateur.getLogin()) != null) ballotString = ballots.get(utilisateur.getLogin()).getBulletin().getCandidat().getNom();
+		} else {
+			status = "deco";
 		}
 
 		String eTagFromBrowser = request.getHeader("If-None-Match");
 
-		if(request.getMethod().equals("GET")){
-			if(eTagFromBrowser != null){
-				if (eTagFromBrowser.equals(getTag())){
-					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-				} else {
-					response.addHeader("Etag",getTag());
-				}
+		if (request.getMethod().equals("GET") && eTagFromBrowser != null) {
+			if (eTagFromBrowser.equals(getTag())) {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			} else {
-				response.setHeader("Etag",getTag());
+				response.addHeader("Etag",getTag());
 			}
+		} else {
+			response.setHeader("Etag",getTag());
 		}
 		chain.doFilter(request, response);
 	}
 
 	private String getTag() {
-		return ballotString + ":" + votes;
+		return status + ":" + ballotString + ":" + votes;
 	}
 }
