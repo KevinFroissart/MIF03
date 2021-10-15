@@ -1,6 +1,6 @@
 package fr.univlyon1.m1if.m1if03.classes.servlets;
 
-import fr.univlyon1.m1if.m1if03.classes.User;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
@@ -26,7 +26,7 @@ public class FiltreAutorisation extends HttpFilter {
             chain.doFilter(request, response);
 
         } else {
-            response.sendRedirect("ballot.jsp");
+            request.getRequestDispatcher("../WEB-INF/components/ballot.jsp").forward(request, response);
         }
     }
 }

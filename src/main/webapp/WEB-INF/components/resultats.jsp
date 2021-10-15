@@ -8,17 +8,9 @@
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="votes" class="java.util.LinkedHashMap" scope="request" />
-<html>
-<head>
-    <title>Vote</title>
-    <link rel="stylesheet" type="text/css" href="static/vote.css">
-</head>
-<body>
-<jsp:include page="WEB-INF/components/header.jsp">
-    <jsp:param name="titre" value="Résultats actuels de l'élection"/>
-</jsp:include>
+<jsp:include page="header.jsp?header=Résultats&titre=Résultats actuels de l'élection"/>
 <main id="contenu" class="wrapper">
-    <%@include file="WEB-INF/components/menu.jsp" %>
+    <%@include file="menu.jsp" %>
     <article class="contenu">
         <h2>Voici le résultat courant de l'élection</h2>
         <ul>
@@ -27,7 +19,4 @@
             </c:forEach>
         </ul>
     </article>
-</main>
-</body>
-<%@include file="WEB-INF/components/footer.html" %>
-</html>
+<%@include file="footer.html" %>

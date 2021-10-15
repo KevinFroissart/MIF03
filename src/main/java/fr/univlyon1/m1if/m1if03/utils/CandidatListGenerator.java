@@ -2,7 +2,7 @@ package fr.univlyon1.m1if.m1if03.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import fr.univlyon1.m1if.m1if03.classes.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 
 import java.io.IOException;
 import java.net.URL;
