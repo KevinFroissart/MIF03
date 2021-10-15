@@ -6,9 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.model.User" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
-<jsp:useBean id="ballots" type="java.util.Map" scope="application" beanName="ballots"/>
 <jsp:include page="header.jsp?header=Ballots&titre=Liste des ballots (admin)"/>
 <main id="contenu" class="wrapper">
     <jsp:include page="menu.jsp"/>

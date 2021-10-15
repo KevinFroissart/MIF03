@@ -18,6 +18,7 @@ public class ControllerResultats extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		System.out.println("Controller resultats");
 		request.getRequestDispatcher("/resultats").include(request, response);
 		request.getRequestDispatcher("../WEB-INF/components/resultats.jsp").forward(request, response);
 	}

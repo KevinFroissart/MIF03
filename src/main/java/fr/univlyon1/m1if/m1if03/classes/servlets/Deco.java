@@ -20,6 +20,7 @@ public class Deco extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 		try {
+			System.out.println("deco");
 			HttpSession session = request.getSession();
 			session.invalidate();
 			response.sendRedirect("../index.html");

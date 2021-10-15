@@ -31,6 +31,7 @@ public class Resultats extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("resultat");
         Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
         Map<String, Integer> votes = new LinkedHashMap<>();
         for (String nomCandidat : candidats.keySet()) {
