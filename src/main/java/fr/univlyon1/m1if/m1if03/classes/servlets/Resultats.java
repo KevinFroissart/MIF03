@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,22 +30,16 @@ public class Resultats extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
-            Map<String, Integer> votes = new LinkedHashMap<>();
-            for (String nomCandidat : candidats.keySet()) {
-                votes.put(nomCandidat, 0);
-            }
-            for (Bulletin bulletin : bulletins) {
-                int score = votes.get(bulletin.getCandidat().getNom());
-                votes.put(bulletin.getCandidat().getNom(), ++score);
-            }
-            request.setAttribute("votes", votes);
-            request.getRequestDispatcher("../resultats.jsp").forward(request, response);
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
+        Map<String, Integer> votes = new LinkedHashMap<>();
+        for (String nomCandidat : candidats.keySet()) {
+            votes.put(nomCandidat, 0);
         }
+        for (Bulletin bulletin : bulletins) {
+            int score = votes.get(bulletin.getCandidat().getNom());
+            votes.put(bulletin.getCandidat().getNom(), ++score);
+        }
+        request.setAttribute("votes", votes);
     }
 }

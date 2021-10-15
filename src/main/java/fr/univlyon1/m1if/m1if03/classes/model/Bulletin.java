@@ -11,10 +11,4 @@ public class Bulletin {
         return candidat;
     }
 
-    @Override
-    public String toString() {
-        return "Bulletin{" +
-                "candidat=" + candidat +
-                '}';
-    }
 }

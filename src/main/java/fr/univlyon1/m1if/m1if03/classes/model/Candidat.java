@@ -16,11 +16,4 @@ public class Candidat {
         return nom;
     }
 
-    @Override
-    public String toString() {
-        return "Candidat{" +
-                "prenom='" + prenom + '\'' +
-                ", nom='" + nom + '\'' +
-                '}';
-    }
 }

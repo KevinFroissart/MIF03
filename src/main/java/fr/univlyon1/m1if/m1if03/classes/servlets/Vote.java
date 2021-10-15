@@ -32,7 +32,7 @@ public class Vote extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
 		if(utilisateur != null) {
@@ -47,7 +47,6 @@ public class Vote extends HttpServlet {
 
 			request.setAttribute("bulletins", bulletins);
 			request.setAttribute("ballots", ballots);
-			request.getRequestDispatcher("ballot.jsp").forward(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
