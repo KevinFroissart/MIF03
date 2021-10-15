@@ -34,7 +34,7 @@ public class FiltreCacheBallots extends HttpFilter {
             return;
 
         }
-        if (uri.equals("/listBallots.jsp")  && method.equals("GET"))
+        if (uri.endsWith("listBallots")  && method.equals("GET"))
         {
             String ifModified = request.getHeader("If-Modified-Since");
             System.out.println("ifModified"+ifModified);
