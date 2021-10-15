@@ -15,5 +15,4 @@ public class Candidat {
     public String getNom() {
         return nom;
     }
-
 }

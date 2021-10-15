@@ -30,22 +30,22 @@
   </servlet-mapping>
   <filter>
     <filter-name>LoginFilter</filter-name>
-    <filter-class>fr.univlyon1.m1if.m1if03.classes.servlets.FiltreAuthentification</filter-class>
+    <filter-class>fr.univlyon1.m1if.m1if03.classes.filter.FiltreAuthentification</filter-class>
   </filter>
 
   <filter>
     <filter-name>AutorisationFilter</filter-name>
-    <filter-class>fr.univlyon1.m1if.m1if03.classes.servlets.FiltreAutorisation</filter-class>
+    <filter-class>fr.univlyon1.m1if.m1if03.classes.filter.FiltreAutorisation</filter-class>
   </filter>
 
   <filter>
     <filter-name>CacheBallotsFilter</filter-name>
-    <filter-class>fr.univlyon1.m1if.m1if03.classes.servlets.FiltreCacheBallots</filter-class>
+    <filter-class>fr.univlyon1.m1if.m1if03.classes.filter.FiltreCacheBallots</filter-class>
   </filter>
 
   <filter>
     <filter-name>ETagFilter</filter-name>
-    <filter-class>fr.univlyon1.m1if.m1if03.classes.servlets.FiltreETag</filter-class>
+    <filter-class>fr.univlyon1.m1if.m1if03.classes.filter.FiltreETag</filter-class>
   </filter>
 
   <filter-mapping>

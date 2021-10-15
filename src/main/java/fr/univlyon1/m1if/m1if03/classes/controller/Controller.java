@@ -7,27 +7,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 @WebServlet(name = "Controller")
 public class Controller extends HttpServlet {
 
+	HashMap<String, String> routes = new HashMap<>();
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		routes.put("vote", "ControllerVote");
+		routes.put("user", "ControllerUser");
+		routes.put("resultats", "ControllerResultats");
+		routes.put("listBallots", "ControllerListBallots");
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String url = request.getRequestURL().toString();
 
-		if(url.endsWith("vote")) {
-			request.getRequestDispatcher("ControllerVote").forward(request, response);
-		} else if (url.endsWith("user")) {
-			request.getRequestDispatcher("ControllerUser").forward(request, response);
-		} else if (url.endsWith("resultats")) {
-			request.getRequestDispatcher("ControllerResultats").forward(request, response);
-		} else if (url.endsWith("listBallots")) {
-			request.getRequestDispatcher("ControllerListBallots").forward(request, response);
+		for (String action : routes.keySet()){
+			if(url.endsWith(action)) request.getRequestDispatcher(routes.get(action)).forward(request, response);
 		}
 	}
 
@@ -35,14 +36,8 @@ public class Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String url = request.getRequestURL().toString();
 
-		if(url.endsWith("vote")) {
-			request.getRequestDispatcher("ControllerVote").forward(request, response);
-		} else if (url.endsWith("user")) {
-			request.getRequestDispatcher("ControllerUser").forward(request, response);
-		} else if (url.endsWith("resultats")) {
-			request.getRequestDispatcher("ControllerResultats").forward(request, response);
-		} else if (url.endsWith("listBallots")) {
-			request.getRequestDispatcher("ControllerListBallots").forward(request, response);
+		for (String action : routes.keySet()){
+			if(url.endsWith(action)) request.getRequestDispatcher(routes.get(action)).forward(request, response);
 		}
 	}
 }

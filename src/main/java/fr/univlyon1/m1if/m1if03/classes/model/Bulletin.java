@@ -10,5 +10,4 @@ public class Bulletin {
     public Candidat getCandidat() {
         return candidat;
     }
-
 }

@@ -24,7 +24,7 @@
                                 ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
                     </p>
                     <p>
-                        ${ballots.size()}
+                        Nombre total de votes: ${ballots.size()}
                     </p>
                     <p>
                         <input type="hidden" name="user" value="${sessionScope.user.login}">

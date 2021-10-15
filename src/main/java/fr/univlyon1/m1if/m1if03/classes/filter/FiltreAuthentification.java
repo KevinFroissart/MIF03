@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes.servlets;
+package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,6 +15,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.User;
 @WebFilter(filterName = "/LoginFilter")
 public class FiltreAuthentification extends HttpFilter {
 
+	@Override
 	public void init(FilterConfig config) throws ServletException {
 		super.init(config);
 	}
