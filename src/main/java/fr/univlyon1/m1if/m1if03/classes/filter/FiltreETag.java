@@ -16,7 +16,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 
-@WebFilter(filterName = "EtagFilter")
+@WebFilter(filterName = "/EtagFilter")
 public class FiltreETag extends HttpFilter {
 
 	String ballotString = "";

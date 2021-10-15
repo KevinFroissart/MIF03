@@ -36,6 +36,7 @@ public class FiltreAuthentification extends HttpFilter {
 			boolean loginNonNull = login != null && !login.equals("");
 
 			if (utilisateurConnecte || ressourceStatic || ressourceAutorisee) {
+				System.out.println("autorisé");
 				chain.doFilter(request, response);
 			} else if(provientFormulaireAuth && loginNonNull){
 				session.setAttribute("user", new User(login,

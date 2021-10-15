@@ -5,17 +5,15 @@
   Time: 13:14
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="votes" class="java.util.LinkedHashMap" scope="request" />
 <jsp:include page="header.jsp?header=Résultats&titre=Résultats actuels de l'élection"/>
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
     <article class="contenu">
         <h2>Voici le résultat courant de l'élection</h2>
         <ul>
-            <c:forEach items="<%= ((Map<String, Integer>) votes).keySet()%>" var="nomCandidat">
-                <li><c:out value="${nomCandidat}"/> : <%= ((Map<String, Integer>) votes).get((String)pageContext.getAttribute("nomCandidat")) %> vote(s)</li>
+            <c:forEach items="${votes.keySet()}" var="nomCandidat">
+                <li><c:out value="${nomCandidat}"/> : ${votes.get(pageContext.getAttribute("nomCandidat"))} vote(s)</li>
             </c:forEach>
         </ul>
     </article>

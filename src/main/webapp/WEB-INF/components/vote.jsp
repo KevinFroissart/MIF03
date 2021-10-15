@@ -6,9 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="fr.univlyon1.m1if.m1if03.classes.model.Candidat" %>
-<jsp:useBean id="candidats" scope="application" class="java.util.LinkedHashMap"/>
 <jsp:include page="header.jsp?header=Vote&titre=Votez pour qui vous voulez"/>
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
@@ -22,7 +19,7 @@
                     <label>Sélectionnez un candidat:</label>
                     <select name="candidat" id="selection">
                         <option value="">----</option>
-                        <c:forEach items="<%= ((Map<String, Candidat>)candidats).keySet()%>" var="nomCandidat">
+                        <c:forEach items="${candidats.keySet()}" var="nomCandidat">
                             <option>
                                 <c:out value="${nomCandidat}"/>
                             </option>

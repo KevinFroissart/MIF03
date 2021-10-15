@@ -4,11 +4,10 @@
   Date: 06/10/2021
   Time: 21:22
   To change this template use File | Settings | File Templates.
-  <jsp:useBean id="ballots" scope="application" class="java.util.LinkedHashMap"/>
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="header.jsp?header=Ballot&titre=Votre preuve de vote"/>
-<%  response.setIntHeader("Refresh", 5); %>
+<%response.setIntHeader("Refresh", 5);%>
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
     <article class="contenu">
