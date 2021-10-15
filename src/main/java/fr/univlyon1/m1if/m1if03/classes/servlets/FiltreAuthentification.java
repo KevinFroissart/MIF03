@@ -21,14 +21,12 @@ public class FiltreAuthentification extends HttpFilter {
 
 	@Override
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("filtre auth");
 		try {
 			request.setCharacterEncoding("UTF-8");
 			HttpSession session = request.getSession(true);
 			String login = request.getParameter("login");
 			User utilisateur = (User) session.getAttribute("user");
 			String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
-			System.out.println(uri);
 
 			boolean utilisateurConnecte = utilisateur != null && !utilisateur.getLogin().equals("");
 			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/election/vote");
@@ -44,7 +42,6 @@ public class FiltreAuthentification extends HttpFilter {
 						request.getParameter("admin") != null && request.getParameter("admin").equals("on")));
 				chain.doFilter(request, response);
 			} else {
-				System.out.println("redirect");
 				response.sendRedirect("index.html");
 			}
 		} catch (IOException e) {

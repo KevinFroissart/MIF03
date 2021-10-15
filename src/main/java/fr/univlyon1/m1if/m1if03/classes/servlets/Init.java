@@ -31,7 +31,6 @@ public class Init extends HttpServlet {
 
         ServletContext context = config.getServletContext();
         context.setAttribute("ballots", ballots);
-        System.out.println(bulletins.toString());
         context.setAttribute("bulletins", bulletins);
 
         try {
