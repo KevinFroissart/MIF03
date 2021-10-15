@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes.servlets;
+package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +29,8 @@ public class FiltreETag extends HttpFilter {
 
 	@Override
 	public void doFilter (HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
-
 		Map<String, Ballot> ballots = (Map<String, Ballot>) request.getServletContext().getAttribute("ballots");
 		List<Bulletin> bulletins = (List<Bulletin>) request.getServletContext().getAttribute("bulletins");
 
@@ -49,7 +44,7 @@ public class FiltreETag extends HttpFilter {
 		if(request.getMethod().equals("GET")){
 			if(eTagFromBrowser != null){
 				if (eTagFromBrowser.equals(getTag())){
-					response.setStatus(304);
+					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 				} else {
 					response.addHeader("Etag",getTag());
 				}

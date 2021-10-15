@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes.servlets;
+package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
@@ -11,15 +11,14 @@ import java.util.Date;
 @WebFilter(filterName = "/CacheBallotsFilter")
 public class FiltreCacheBallots extends HttpFilter {
 
+    @Override
     public void init(FilterConfig config) throws ServletException {
         super.init(config);
     }
 
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException {
-
         Date date = new Date();
-
         try {
             String method = request.getMethod();
             String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
