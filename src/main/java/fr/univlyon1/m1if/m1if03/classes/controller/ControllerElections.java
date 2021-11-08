@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots"})
+@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote"})
 public class ControllerElections extends HttpServlet {
 
 	HashMap<String, String> routes = new HashMap<>();
@@ -19,6 +19,7 @@ public class ControllerElections extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		routes.put("vote", "ControllerVote");
+		routes.put("deleteVote", "ControllerVote");
 		routes.put("resultats", "ControllerResultats");
 		routes.put("listBallots", "ControllerListBallots");
 	}

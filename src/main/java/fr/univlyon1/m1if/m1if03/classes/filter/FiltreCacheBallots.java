@@ -10,6 +10,7 @@ import java.util.Date;
 
 @WebFilter(filterName = "/CacheBallotsFilter")
 public class FiltreCacheBallots extends HttpFilter {
+    Long lastModified = (long) -1;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -17,33 +18,27 @@ public class FiltreCacheBallots extends HttpFilter {
     }
 
     @Override
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException {
-        Date date = new Date();
-        try {
-            String method = request.getMethod();
-            String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
-
-            if (method.equals("POST")){
-                chain.doFilter(request,response);
-                getServletContext().setAttribute("date", date.getTime());
-                return;
-            }
-            if (uri.endsWith("listBallots") && method.equals("GET")) {
-                String ifModified = request.getHeader("If-Modified-Since");
-                response.setDateHeader("Last-Modified", date.getTime());
-                if (ifModified != null) {
-                    long lastModifiedFromBrowser = request.getDateHeader("If-Modified-Since");
-                    long lastModifiedFromServer = (long) getServletContext().getAttribute("date");
-                    if (lastModifiedFromBrowser != -1 && lastModifiedFromServer < lastModifiedFromBrowser) {
-                        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                        return;
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        switch(req.getRequestURI().split("/")[req.getRequestURI().split("/").length - 1]) {
+            case "listBallots":
+                if(req.getMethod().equals("GET")) {
+                    if(req.getHeader("If-Modified-Since") != null && req.getDateHeader("If-Modified-Since") > lastModified) {
+                        res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    } else {
+                        res.setDateHeader("Last-Modified", new Date().getTime());
+                        super.doFilter(req, res, chain);
                     }
                 }
-            }
-            chain.doFilter(request, response);
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                break;
+            case "vote":
+            case "deleteVote":
+                if(req.getMethod().equals("POST")) {
+                    super.doFilter(req, res, chain);
+                    lastModified = new Date().getTime();
+                    break;
+                }
+            default:
+                super.doFilter(req, res, chain);
         }
     }
 }
