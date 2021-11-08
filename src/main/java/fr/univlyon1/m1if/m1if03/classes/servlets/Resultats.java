@@ -15,7 +15,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 
-@WebServlet(name = "Resultat", value = "/resultats")
+@WebServlet(name = "Resultats", value = {})
 public class Resultats extends HttpServlet {
 
     Map<String, Ballot> ballots = null;

@@ -11,17 +11,17 @@
     <ul>
         <c:choose>
             <c:when test="${sessionScope.user != null}">
-                <li><a href="vote">Voter</a></li>
-                <li><a href="listBallots">Votre vote</a></li>
+                <li><a href="../election/vote">Voter</a></li>
+                <li><a href="../election/listBallots">Votre vote</a></li>
             </c:when>
             <c:otherwise>
                 <li><a href="../index.html">Se connecter</a></li>
             </c:otherwise>
         </c:choose>
-        <li><a href="resultats">Résultats</a></li>
+        <li><a href="../election/resultats">Résultats</a></li>
         <c:if test="${sessionScope.user != null}">
-            <li><a href="user">Votre profil</a></li>
-            <li><a href="deco">Déconnexion</a></li>
+            <li><a href="../users/user">Votre profil</a></li>
+            <li><a href="../deco">Déconnexion</a></li>
         </c:if>
     </ul>
 </aside>

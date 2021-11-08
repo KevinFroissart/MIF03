@@ -10,22 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "/AutorisationFilter")
+@WebFilter(filterName = "FiltreAutorisation", urlPatterns = "/election/listBallots")
 public class FiltreAutorisation extends HttpFilter {
-
     @Override
-    public void init(FilterConfig config) throws ServletException {
-        super.init(config);
-    }
-
-    @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = request.getSession(true);
-        User utilisateur = (User) session.getAttribute("user");
-        if(utilisateur.isAdmin()){
-            chain.doFilter(request, response);
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        if(((User) req.getSession().getAttribute("user")).isAdmin()) {
+            super.doFilter(req, res, chain);
         } else {
-            request.getRequestDispatcher("../WEB-INF/components/ballot.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/components/ballot.jsp").forward(req, res);
+//            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Vous devez être administrateur pour accéder à cette page.");
         }
     }
 }

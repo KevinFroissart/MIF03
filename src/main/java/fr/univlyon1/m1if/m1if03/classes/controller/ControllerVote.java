@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/election/ControllerVote")
+@WebServlet(name = "ControllerVote", value = {})
 public class ControllerVote extends HttpServlet {
 
 	@Override
@@ -18,7 +18,7 @@ public class ControllerVote extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		request.getRequestDispatcher("../WEB-INF/components/vote.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/components/vote.jsp").forward(request, response);
 	}
 
 	@Override
@@ -27,10 +27,10 @@ public class ControllerVote extends HttpServlet {
 				|| request.getParameter("candidat").equals("")
 				|| request.getParameter("candidat").equals("null");
 		if(candidatNull){
-			request.getRequestDispatcher("../WEB-INF/components/vote.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/components/vote.jsp").forward(request, response);
 		} else {
-			request.getRequestDispatcher("/castVote").include(request, response);
-			request.getRequestDispatcher("../WEB-INF/components/ballot.jsp").forward(request, response);
+			this.getServletContext().getNamedDispatcher("Vote").include(request, response);
+			this.getServletContext().getRequestDispatcher("/WEB-INF/components/ballot.jsp").forward(request, response);
 		}
 	}
 }
