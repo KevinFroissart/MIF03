@@ -6,6 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+    <title>${param.header}</title>
+    <link rel="stylesheet" type="text/css" href="../static/vote.css">
+</head>
+<body>
 <header>
     <c:if test="${sessionScope.user != null}">
         <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>

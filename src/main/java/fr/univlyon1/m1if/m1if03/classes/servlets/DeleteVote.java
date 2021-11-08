@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.servlets;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "DeleteVote", value = "/deleteVote")
+import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
+
+@WebServlet(name = "DeleteVote", value = "/election/deleteVote")
 public class DeleteVote extends HttpServlet {
 
     Map<String, Ballot> ballots = null;
@@ -23,21 +27,23 @@ public class DeleteVote extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String login = request.getParameter("user");
+        Ballot ballot = ballots.get(login);
+        Bulletin bulletin = ballot.getBulletin();
+        bulletins.remove(bulletin);
+        ballots.remove(login);
+
         HttpSession session = request.getSession(true);
         User utilisateur = (User) session.getAttribute("user");
-        if(utilisateur != null) {
-            Ballot ballot = ballots.get(utilisateur.getLogin());
-            Bulletin bulletin = ballot.getBulletin();
-            bulletins.remove(bulletin);
-            ballots.remove(utilisateur.getLogin());
-            request.getRequestDispatcher("ballot.jsp").forward(request, response);
-        } else {
-            response.sendRedirect("index.html");
-        }
+        request.getRequestDispatcher(
+                utilisateur.isAdmin()
+                ? "../WEB-INF/components/listBallots.jsp"
+                : "../WEB-INF/components/ballot.jsp")
+                .forward(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("index.html");
+        response.sendRedirect("../index.html");
     }
 }
