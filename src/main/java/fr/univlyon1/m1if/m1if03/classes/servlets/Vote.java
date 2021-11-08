@@ -1,4 +1,4 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.servlets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -11,6 +11,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
+import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
+import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 @WebServlet(name = "Vote", value = "/castVote")
 public class Vote extends HttpServlet {
@@ -27,7 +32,7 @@ public class Vote extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession(true);
 		User utilisateur = (User) session.getAttribute("user");
 		if(utilisateur != null) {
@@ -42,7 +47,6 @@ public class Vote extends HttpServlet {
 
 			request.setAttribute("bulletins", bulletins);
 			request.setAttribute("ballots", ballots);
-			request.getRequestDispatcher("ballot.jsp").forward(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}

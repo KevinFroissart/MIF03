@@ -1,14 +1,16 @@
-package fr.univlyon1.m1if.m1if03.classes;
+package fr.univlyon1.m1if.m1if03.classes.model;
 
 import java.util.Objects;
 
 public class User {
     private final String login;
     private String nom;
+    private final boolean admin;
 
-    public User(String login, String nom) {
+    public User(String login, String nom, boolean admin) {
         this.login = login;
         this.nom = nom;
+        this.admin = admin;
     }
 
     public String getLogin() {
@@ -21,6 +23,10 @@ public class User {
 
     public String getNom() {
         return nom;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 
     @Override
