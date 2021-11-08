@@ -26,7 +26,9 @@ public class ControllerVote extends HttpServlet {
 		boolean candidatNull = request.getParameter("candidat") == null
 				|| request.getParameter("candidat").equals("")
 				|| request.getParameter("candidat").equals("null");
-		if(candidatNull){
+		if(request.getRequestURI().endsWith("deleteVote")) {
+			this.getServletContext().getNamedDispatcher("DeleteVote").forward(request, response);
+		} else if(candidatNull){
 			request.getRequestDispatcher("/WEB-INF/components/vote.jsp").forward(request, response);
 		} else {
 			this.getServletContext().getNamedDispatcher("Vote").include(request, response);
