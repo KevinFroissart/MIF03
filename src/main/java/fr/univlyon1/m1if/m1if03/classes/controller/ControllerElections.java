@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote"})
+@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote", "/election/candidats*"})
 public class ControllerElections extends HttpServlet {
 
 	HashMap<String, String> routes = new HashMap<>();
@@ -22,6 +22,7 @@ public class ControllerElections extends HttpServlet {
 		routes.put("deleteVote", "ControllerVote");
 		routes.put("resultats", "ControllerResultats");
 		routes.put("listBallots", "ControllerListBallots");
+		routes.put("candidats", "ControllerCandidats");
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class ControllerElections extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.endsWith(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
 		}
 	}
 
@@ -38,7 +39,7 @@ public class ControllerElections extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.endsWith(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
 		}
 	}
 }
