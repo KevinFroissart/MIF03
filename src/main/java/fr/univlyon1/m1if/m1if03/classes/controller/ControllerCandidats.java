@@ -18,7 +18,7 @@ public class ControllerCandidats extends HttpServlet {
 
         if(uri.endsWith("candidats")) CandidatsService.getCandidats(); // /election/candidats
         else if(uri.endsWith("noms")) CandidatsService.getNomCandidats(); // /election/candidats/nom
-        else CandidatsService.getCandidat(Integer.parseInt(uri.substring(uri.lastIndexOf('/') + 1))); // /election/candidats/{candidatId}
+        else if(uri.contains("/candidats/")) CandidatsService.getCandidat(Integer.parseInt(uri.substring(uri.lastIndexOf('/') + 1))); // /election/candidats/{candidatId}
     }
 
     @Override

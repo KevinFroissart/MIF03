@@ -18,8 +18,8 @@ public class ControllerElections extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		routes.put("vote", "ControllerVote");
-		routes.put("deleteVote", "ControllerVote");
+		routes.put("votes", "ControllerVote");
+		//routes.put("deleteVote", "ControllerVote");
 		routes.put("resultats", "ControllerResultats");
 		routes.put("listBallots", "ControllerListBallots");
 		routes.put("candidats", "ControllerCandidats");
