@@ -41,5 +41,10 @@ public class Resultats extends HttpServlet {
             votes.put(bulletin.getCandidat().getNom(), ++score);
         }
         request.setAttribute("votes", votes);
+
+        // /election/resultats
+        for(Map.Entry<String, Integer> vote : votes.entrySet()) {
+            System.out.println(vote.getKey() + " : " + vote.getValue());
+        }
     }
 }
