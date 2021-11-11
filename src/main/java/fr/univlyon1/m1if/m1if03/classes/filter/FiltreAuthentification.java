@@ -14,7 +14,17 @@ import fr.univlyon1.m1if.m1if03.classes.model.User;
 
 @WebFilter(filterName = "FiltreAuthentification", urlPatterns = "/*")
 public class FiltreAuthentification extends HttpFilter {
-	private final String[] authorizedURIs = {"/index.html", "/static", "/election/resultats"}; // Manque "/", traité plus bas...
+
+	private final String[] authorizedURIs = {
+			"/index.html",
+			"/static",
+			"/election/resultats",
+			"/election/candidats",
+			"/election/candidats/nom",
+			"/users/login",
+			"/users/logout"
+	};
+
 	@Override
 	protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 		String currentUri = req.getRequestURI().replace(req.getContextPath(), "");
@@ -37,6 +47,7 @@ public class FiltreAuthentification extends HttpFilter {
 		if(session != null && session.getAttribute("user") != null) {
 			super.doFilter(req, res, chain);
 		} else {
+			// TODO: après 2.2 , supprimer ce code (déjà dans l'api login)
 			String login = req.getParameter("login");
 			if(req.getMethod().equals("POST") && login != null && !login.equals("")) {
 				session = req.getSession(true);

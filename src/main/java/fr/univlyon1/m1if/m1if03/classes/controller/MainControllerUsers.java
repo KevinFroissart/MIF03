@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ControllerUsers", value = {"/users/user"})
-public class ControllerUsers extends HttpServlet {
+@WebServlet(name = "ControllerUsers", value = {"/users", "/users/*"})
+public class MainControllerUsers extends HttpServlet {
 
 	HashMap<String, String> routes = new HashMap<>();
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		routes.put("user", "ControllerUser");
+		routes.put("users", "ControllerUser");
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class ControllerUsers extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.endsWith(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
 		}
 	}
 
@@ -35,7 +35,16 @@ public class ControllerUsers extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.endsWith(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+		}
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		String url = request.getRequestURL().toString();
+
+		for(Map.Entry<String, String> entry : routes.entrySet()) {
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
 		}
 	}
 }

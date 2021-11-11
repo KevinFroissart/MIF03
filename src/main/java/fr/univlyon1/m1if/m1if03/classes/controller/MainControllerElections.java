@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote", "/election/candidats*"})
-public class ControllerElections extends HttpServlet {
+@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote", "/election/candidats", "/election/candidats/*"})
+public class MainControllerElections extends HttpServlet {
 
 	HashMap<String, String> routes = new HashMap<>();
 
