@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,9 @@ import java.util.Map;
 import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
+import fr.univlyon1.m1if.m1if03.classes.model.ElectionJSON;
+import fr.univlyon1.m1if.m1if03.classes.model.VotesJSON;
+import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
 
 @WebServlet(name = "Resultats", value = {})
 public class Resultats extends HttpServlet {
@@ -30,7 +35,7 @@ public class Resultats extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Candidat> candidats = (Map<String, Candidat>) request.getServletContext().getAttribute("candidats");
         Map<String, Integer> votes = new LinkedHashMap<>();
         for (String nomCandidat : candidats.keySet()) {
@@ -42,9 +47,13 @@ public class Resultats extends HttpServlet {
         }
         request.setAttribute("votes", votes);
 
+        List<VotesJSON> election = new ArrayList<>();
+
         // /election/resultats
-        for(Map.Entry<String, Integer> vote : votes.entrySet()) {
-            System.out.println(vote.getKey() + " : " + vote.getValue());
+        for (Map.Entry<String, Integer> vote : votes.entrySet()) {
+            election.add(new VotesJSON(vote.getKey(), vote.getValue()));
         }
+
+        APIResponseUtils.buildJson(response, new ElectionJSON(election));
     }
 }
