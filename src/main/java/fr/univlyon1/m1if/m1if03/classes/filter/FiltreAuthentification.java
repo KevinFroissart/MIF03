@@ -1,16 +1,13 @@
 package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.JWTHelper;
 
 @WebFilter(filterName = "FiltreAuthentification", urlPatterns = "/*")
@@ -48,7 +45,7 @@ public class FiltreAuthentification extends HttpFilter {
             String token = req.getHeader("Authorization");
             try {
                 JWTHelper.verifyToken(token);
-                req.setAttribute("token", token);
+                JWTHelper.extendExpiration(token);
                 super.doFilter(req, res, chain);
                 return;
             } catch (Exception e) {
