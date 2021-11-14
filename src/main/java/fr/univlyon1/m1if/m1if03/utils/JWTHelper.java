@@ -21,7 +21,6 @@ public class JWTHelper {
         JWTVerifier authenticationVerifier = JWT.require(algorithm)
                 .withIssuer(ISSUER)
                 .build();
-
         authenticationVerifier.verify(token);
         DecodedJWT jwt = JWT.decode(token);
         return jwt.getClaim("sub").asString();
@@ -43,6 +42,10 @@ public class JWTHelper {
                 .withClaim("admin", admin)
                 .withExpiresAt(new Date(new Date().getTime() + LIFETIME))
                 .sign(algorithm);
+    }
+
+    public static void extendExpiration(String token) {
+        JWT.decode(token).getExpiresAt().setTime(new Date().getTime() + LIFETIME);
     }
 
 }

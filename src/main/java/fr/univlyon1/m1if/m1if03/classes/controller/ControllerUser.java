@@ -6,7 +6,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -145,6 +144,7 @@ public class ControllerUser extends HttpServlet {
             String token = JWTHelper.generateToken(user.getLogin(), user.isAdmin());
             response.setHeader("Authorization", "Bearer " + token);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            request.setAttribute("token", token);
             request.setAttribute("user", user);
 
             String uuid = UUID.nameUUIDFromBytes(login.getBytes()).toString();
@@ -155,14 +155,7 @@ public class ControllerUser extends HttpServlet {
 
         // /users/logout
         else if (uri.get(1).equals("logout")) {
-            HttpSession session = request.getSession(false);
-            if (request.getAttribute("user") == null) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié");
-                return;
-            }
-            request.removeAttribute("token");
-            session.invalidate();
-            response.sendRedirect("index.html");
+            response.sendRedirect("../index.html");
         }
     }
 
