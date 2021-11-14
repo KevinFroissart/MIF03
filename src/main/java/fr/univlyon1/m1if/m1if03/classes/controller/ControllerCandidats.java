@@ -1,7 +1,6 @@
 package fr.univlyon1.m1if.m1if03.classes.controller;
 
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
-import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
 import fr.univlyon1.m1if.m1if03.utils.CandidatListGenerator;
 
@@ -13,12 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "ControllerCandidats", value = {})
 public class ControllerCandidats extends HttpServlet {
 
+    private Map<String, Candidat> candidatsId;
     private Map<String, Candidat> candidats;
     private List<String> uri;
 
@@ -26,48 +27,48 @@ public class ControllerCandidats extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.candidats = (Map<String, Candidat>) config.getServletContext().getAttribute("candidats");
+        this.candidatsId = (Map<String, Candidat>) config.getServletContext().getAttribute("candidatsId");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        if(uri.size() == 2) {
-            // /election/candidats
-            List<Candidat> candidatsList = new ArrayList<>(candidats.values());
-            APIResponseUtils.buildJson(response, candidatsList);
-        }
+        // /election/candidats
+        if (uri.size() == 2) {
+            List<String> urls = new ArrayList<>();
+            for (int i = 0; i < candidats.size(); i++) {
+                urls.add(request.getRequestURL() + "/" + i);
+            }
+            APIResponseUtils.buildJson(response, urls);
+        } else if (uri.size() == 3) {
 
-        else if(uri.size() == 3) {
-
-            if(uri.get(2).equals("noms")) {
-                // /election/candidats/nom
+            // /election/candidats/nom
+            if (uri.get(2).equals("noms")) {
                 List<String> candidatsList = new ArrayList<>();
-                for(Candidat candidat : candidats.values()){
+                for (Candidat candidat : candidats.values()) {
                     candidatsList.add(candidat.getNom());
                 }
                 APIResponseUtils.buildJson(response, candidatsList);
             }
 
-            else if(uri.get(1).equals("candidats")) {
-                // /election/candidats/{candidatId}
-               // TODO: implémenter
-            }
-
-            else {
+            // /election/candidats/{candidatId}
+            else if (uri.get(1).equals("candidats")) {
+                String uuid = uri.get(2);
+                Candidat candidat = candidatsId.get(uuid);
+                if (candidat == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Candidat non trouvé.");
+                    return;
+                }
+                APIResponseUtils.buildJson(response, Arrays.asList(candidat.getPrenom() + " " + candidat.getNom()));
+            } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Requête non reconnue");
                 return;
             }
-        }
-
-        else {
+        } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Requête non reconnue");
             return;
         }
-
-//        if(uri.endsWith("candidats")) CandidatsService.getCandidats(); // /election/candidats
-//        else if(uri.endsWith("noms")) CandidatsService.getNomCandidats(); // /election/candidats/nom
-//        else if(uri.contains("/candidats/")) CandidatsService.getCandidat(Integer.parseInt(uri.substring(uri.lastIndexOf('/') + 1))); // /election/candidats/{candidatId}
     }
 
     @Override
@@ -75,12 +76,7 @@ public class ControllerCandidats extends HttpServlet {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
         // /election/candidats/update
-        if(uri.get(2).equals("update")) {
-            User utilisateur = (User) request.getSession(false).getAttribute("user");
-            if(!utilisateur.isAdmin()) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur");
-                return;
-            }
+        if (uri.get(2).equals("update")) {
             try {
                 candidats = CandidatListGenerator.getCandidatList();
                 this.getServletContext().setAttribute("candidats", candidats);

@@ -10,36 +10,68 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ControllerElections", value = {"/election/resultats", "/election/vote", "/election/listBallots", "/election/deleteVote", "/election/candidats", "/election/candidats/*"})
+@WebServlet(name = "ControllerElections", value = {
+        "/election/resultats",
+        "/election/votes",
+        "/election/votes/*",
+        "/election/listBallots",
+        "/election/deleteVote",
+        "/election/candidats",
+        "/election/candidats/*",
+        "/election/ballots",
+        "/election/ballots/*"})
 public class MainControllerElections extends HttpServlet {
 
-	HashMap<String, String> routes = new HashMap<>();
+    HashMap<String, String> routes = new HashMap<>();
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		routes.put("votes", "ControllerVote");
-		//routes.put("deleteVote", "ControllerVote");
-		routes.put("resultats", "ControllerResultats");
-		routes.put("listBallots", "ControllerListBallots");
-		routes.put("candidats", "ControllerCandidats");
-	}
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        routes.put("votes", "ControllerVote");
+        //routes.put("deleteVote", "ControllerVote");
+        routes.put("resultats", "ControllerResultats");
+        routes.put("listBallots", "ControllerListBallots");
+        routes.put("candidats", "ControllerCandidats");
+        routes.put("ballots", "ControllerBallots");
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		String url = request.getRequestURL().toString();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String url = request.getRequestURL().toString();
 
-		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
-		}
-	}
+        for (Map.Entry<String, String> entry : routes.entrySet()) {
+            if (url.contains(entry.getKey()))
+                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		String url = request.getRequestURL().toString();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String url = request.getRequestURL().toString();
 
-		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
-		}
-	}
+        for (Map.Entry<String, String> entry : routes.entrySet()) {
+            if (url.contains(entry.getKey()))
+                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String url = request.getRequestURL().toString();
+
+        for (Map.Entry<String, String> entry : routes.entrySet()) {
+            if (url.contains(entry.getKey()))
+                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String url = request.getRequestURL().toString();
+
+        for (Map.Entry<String, String> entry : routes.entrySet()) {
+            if (url.contains(entry.getKey()))
+                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+        }
+    }
 }
