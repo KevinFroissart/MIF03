@@ -5,7 +5,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
-import fr.univlyon1.m1if.m1if03.utils.JWTHelper;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -48,7 +48,7 @@ public class ControllerBallots extends HttpServlet {
         // /election/ballots
         if (uri.size() == 2) {
             String token = request.getHeader("Authorization");
-            if (!JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur.");
                 return;
             }
@@ -70,7 +70,7 @@ public class ControllerBallots extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyAdmin(token) && !JWTHelper.verifyToken(token).equals(user.getLogin())) {
+            if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin())) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }
@@ -95,7 +95,7 @@ public class ControllerBallots extends HttpServlet {
             String login = uri.get(3).replaceAll("%20", " ");
 
             String token = request.getHeader("Authorization");
-            if (!JWTHelper.verifyAdmin(token) && !JWTHelper.verifyToken(token).equals(login)) {
+            if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(login)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }
@@ -131,7 +131,7 @@ public class ControllerBallots extends HttpServlet {
             }
 
             String token = request.getHeader("Authorization");
-            String login = JWTHelper.verifyToken(token);
+            String login = ElectionM1if03JwtHelper.verifyToken(token, request);
             String uuid = UUID.nameUUIDFromBytes(login.getBytes()).toString();
 
             Bulletin bulletin = new Bulletin(candidat);
@@ -162,7 +162,7 @@ public class ControllerBallots extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyAdmin(token) && !JWTHelper.verifyToken(token).equals(user.getLogin())) {
+            if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin())) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }

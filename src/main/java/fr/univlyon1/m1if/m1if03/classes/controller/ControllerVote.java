@@ -18,7 +18,7 @@ import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
-import fr.univlyon1.m1if.m1if03.utils.JWTHelper;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
 @WebServlet(name = "ControllerVote", value = {})
 public class ControllerVote extends HttpServlet {
@@ -57,7 +57,7 @@ public class ControllerVote extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyToken(token).equals(user.getLogin()) && !JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin()) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du vote.");
                 return;
             }
@@ -74,7 +74,7 @@ public class ControllerVote extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyToken(token).equals(login) && !JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du vote.");
                 return;
             }
@@ -113,11 +113,11 @@ public class ControllerVote extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyToken(token).equals(user.getLogin()) && !JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin()) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du vote.");
                 return;
             }
-            
+
             bulletins.remove(ballot.getBulletin());
             ballots.remove(login);
             ballotsId.remove(uuid);
