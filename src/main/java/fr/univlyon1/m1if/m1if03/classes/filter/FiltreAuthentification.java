@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import fr.univlyon1.m1if.m1if03.utils.JWTHelper;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
 @WebFilter(filterName = "FiltreAuthentification", urlPatterns = "/*")
 public class FiltreAuthentification extends HttpFilter {
@@ -44,8 +44,7 @@ public class FiltreAuthentification extends HttpFilter {
         if (req.getHeader("Authorization") != null) {
             String token = req.getHeader("Authorization");
             try {
-                JWTHelper.verifyToken(token);
-                JWTHelper.extendExpiration(token);
+                ElectionM1if03JwtHelper.verifyToken(token, req);
                 super.doFilter(req, res, chain);
                 return;
             } catch (Exception e) {

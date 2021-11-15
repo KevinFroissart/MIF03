@@ -17,7 +17,7 @@ import java.util.UUID;
 import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
-import fr.univlyon1.m1if.m1if03.utils.JWTHelper;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
 @WebServlet(name = "ControllerUser", value = {})
 public class ControllerUser extends HttpServlet {
@@ -54,7 +54,7 @@ public class ControllerUser extends HttpServlet {
             String login = uri.get(1).replaceAll("%20", " ");
             String token = (String) request.getAttribute("token");
 
-            if (!JWTHelper.verifyToken(token).equals(login) && !JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou pas celui qui est logué.");
                 return;
             }
@@ -70,7 +70,7 @@ public class ControllerUser extends HttpServlet {
                 String login = uri.get(1).replaceAll("%20", " ");
                 String token = (String) request.getAttribute("token");
 
-                if (!JWTHelper.verifyToken(token).equals(login) && !JWTHelper.verifyAdmin(token)) {
+                if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du vote.");
                     return;
                 }
@@ -95,7 +95,7 @@ public class ControllerUser extends HttpServlet {
                 String login = uri.get(1).replaceAll("%20", " ");
                 String token = (String) request.getAttribute("token");
 
-                if (!JWTHelper.verifyToken(token).equals(login) && !JWTHelper.verifyAdmin(token)) {
+                if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
                     return;
                 }
@@ -141,7 +141,7 @@ public class ControllerUser extends HttpServlet {
 
             User user = new User(login, nom, admin);
 
-            String token = JWTHelper.generateToken(user.getLogin(), user.isAdmin());
+            String token = ElectionM1if03JwtHelper.generateToken(user.getLogin(), user.isAdmin(), request);
             response.setHeader("Authorization", "Bearer " + token);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             request.setAttribute("token", token);
@@ -178,7 +178,7 @@ public class ControllerUser extends HttpServlet {
                 return;
             }
 
-            if (!JWTHelper.verifyToken(token).equals(login) && !JWTHelper.verifyAdmin(token)) {
+            if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou pas celui qui est logué.");
                 return;
             }
