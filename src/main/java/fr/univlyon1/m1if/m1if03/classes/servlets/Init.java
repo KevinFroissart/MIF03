@@ -46,15 +46,6 @@ public class Init extends HttpServlet {
         try {
             candidats = CandidatListGenerator.getCandidatList();
             context.setAttribute("candidats", candidats);
-
-            Map<String, Candidat> candidatsId = new HashMap<>();
-            for (Candidat candidat : candidats.values()) {
-                String cand = candidat.getNom() + candidat.getPrenom();
-                String uuid = UUID.nameUUIDFromBytes(cand.getBytes()).toString();
-                candidatsId.put(uuid, candidat);
-            }
-
-            context.setAttribute("candidatsId", candidatsId);
         } catch (IOException e) {
             e.printStackTrace();
         }

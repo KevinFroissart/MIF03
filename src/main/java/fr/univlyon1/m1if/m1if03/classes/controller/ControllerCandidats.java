@@ -19,7 +19,6 @@ import java.util.Map;
 @WebServlet(name = "ControllerCandidats", value = {})
 public class ControllerCandidats extends HttpServlet {
 
-    private Map<String, Candidat> candidatsId;
     private Map<String, Candidat> candidats;
     private List<String> uri;
 
@@ -27,7 +26,6 @@ public class ControllerCandidats extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.candidats = (Map<String, Candidat>) config.getServletContext().getAttribute("candidats");
-        this.candidatsId = (Map<String, Candidat>) config.getServletContext().getAttribute("candidatsId");
     }
 
     @Override
@@ -54,8 +52,10 @@ public class ControllerCandidats extends HttpServlet {
 
             // /election/candidats/{candidatId}
             else if (uri.get(1).equals("candidats")) {
-                String uuid = uri.get(2);
-                Candidat candidat = candidatsId.get(uuid);
+                String nom = uri.get(2).replaceAll("%20", " ");
+
+                Candidat candidat = candidats.get(nom);
+
                 if (candidat == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Candidat non trouvé.");
                     return;
