@@ -57,7 +57,9 @@ public class ControllerBallots extends HttpServlet {
             for (int i = 0; i < ballots.size(); i++) {
                 urls.add(request.getRequestURL().toString() + "/" + i);
             }
-            APIResponseUtils.buildJson(response, urls);
+            request.setAttribute("DTO", urls);
+
+            APIResponseUtils.buildJson(response, request.getAttribute("DTO"));
         }
         // /election/ballots/{ballotId}
         else if (uri.size() == 3) {

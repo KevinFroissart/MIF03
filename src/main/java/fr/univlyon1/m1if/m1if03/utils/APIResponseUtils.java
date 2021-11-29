@@ -11,21 +11,17 @@ import java.util.List;
 
 public class APIResponseUtils {
 
-    public static List<String>  splitUri(String url){
+    public static List<String> splitUri(String url){
         List<String> uri = new LinkedList<>(Arrays.asList(url.split("/")));
         uri.remove(0);
         uri.remove(0);
         return uri;
     }
 
-    public static void buildJson(HttpServletResponse response, Object object) throws IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+    public static String buildJson(HttpServletResponse response, Object object) throws IOException {
+        response.setContentType("application/json");
         ObjectMapper objectMapper = new ObjectMapper();
-        String res = objectMapper.writeValueAsString(object);
-        PrintWriter out = response.getWriter();
-        out.print(res);
-        out.flush();
+        return objectMapper.writeValueAsString(object);
     }
 
 

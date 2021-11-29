@@ -41,7 +41,7 @@ public class MainControllerElections extends HttpServlet {
 
         for (Map.Entry<String, String> entry : routes.entrySet()) {
             if (url.contains(entry.getKey()))
-                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+                this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
         }
     }
 
@@ -51,7 +51,7 @@ public class MainControllerElections extends HttpServlet {
 
         for (Map.Entry<String, String> entry : routes.entrySet()) {
             if (url.contains(entry.getKey()))
-                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+                this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
         }
     }
 
@@ -61,7 +61,7 @@ public class MainControllerElections extends HttpServlet {
 
         for (Map.Entry<String, String> entry : routes.entrySet()) {
             if (url.contains(entry.getKey()))
-                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+                this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
         }
     }
 
@@ -71,7 +71,7 @@ public class MainControllerElections extends HttpServlet {
 
         for (Map.Entry<String, String> entry : routes.entrySet()) {
             if (url.contains(entry.getKey()))
-                this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+                this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
         }
     }
 }
