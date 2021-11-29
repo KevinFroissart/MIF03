@@ -47,7 +47,8 @@ public class ControllerCandidats extends HttpServlet {
                 for (Candidat candidat : candidats.values()) {
                     candidatsList.add(candidat.getNom());
                 }
-                APIResponseUtils.buildJson(response, candidatsList);
+                request.setAttribute("DTO", candidatsList);
+//                APIResponseUtils.buildJson(response, candidatsList);
             }
 
             // /election/candidats/{candidatId}

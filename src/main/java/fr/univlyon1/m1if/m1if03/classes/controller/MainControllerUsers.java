@@ -26,7 +26,7 @@ public class MainControllerUsers extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class MainControllerUsers extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class MainControllerUsers extends HttpServlet {
 		String url = request.getRequestURL().toString();
 
 		for(Map.Entry<String, String> entry : routes.entrySet()) {
-			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).forward(request, response);
+			if(url.contains(entry.getKey())) this.getServletContext().getNamedDispatcher(entry.getValue()).include(request, response);
 		}
 	}
 }
