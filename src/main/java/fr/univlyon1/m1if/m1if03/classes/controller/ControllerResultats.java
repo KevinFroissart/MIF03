@@ -12,12 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
-import fr.univlyon1.m1if.m1if03.classes.model.ElectionJSON;
-import fr.univlyon1.m1if.m1if03.classes.model.User;
-import fr.univlyon1.m1if.m1if03.classes.model.VotesJSON;
+import fr.univlyon1.m1if.m1if03.classes.dto.VotesDTO;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
 
 @WebServlet(name = "ControllerResultats", value = {})
@@ -49,10 +46,10 @@ public class ControllerResultats extends HttpServlet {
             votes.put(bulletin.getCandidat().getNom(), ++score);
         }
 
-        List<VotesJSON> election = new ArrayList<>();
+        List<VotesDTO> election = new ArrayList<>();
 
         for (Map.Entry<String, Integer> vote : votes.entrySet()) {
-            election.add(new VotesJSON(vote.getKey(), vote.getValue()));
+            election.add(new VotesDTO(vote.getKey(), vote.getValue()));
         }
 
         request.setAttribute("DTO", election);

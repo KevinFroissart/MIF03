@@ -1,5 +1,8 @@
 package fr.univlyon1.m1if.m1if03.classes.controller;
 
+import fr.univlyon1.m1if.m1if03.classes.dto.BallotByIdDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.BallotByUserDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.BallotsDTO;
 import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
@@ -14,172 +17,184 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @WebServlet(name = "ControllerBallots", value = {})
 public class ControllerBallots extends HttpServlet {
 
     private List<String> uri;
-    List<Bulletin> bulletins = null;
-    Map<String, Ballot> ballots = null;
-    Map<String, Ballot> ballotsId = null;
-    Map<String, Candidat> candidats = null;
-    Map<String, User> usersId = null;
-
+    private List<Bulletin> bulletins = null;
+    private Map<String, Ballot> ballots = null;
+    private Map<Integer, Ballot> ballotsId = null;
+    private Map<String, Candidat> candidats = null;
+    private Map<User, Integer> usersId;
+    private Map<String, User> users;
+    private int compteur;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.ballots = (Map<String, Ballot>) config.getServletContext().getAttribute("ballots");
-        this.ballotsId = (Map<String, Ballot>) config.getServletContext().getAttribute("ballotsId");
+        this.ballotsId = (Map<Integer, Ballot>) config.getServletContext().getAttribute("ballotsId");
         this.bulletins = (List<Bulletin>) config.getServletContext().getAttribute("bulletins");
         this.candidats = (Map<String, Candidat>) config.getServletContext().getAttribute("candidats");
-        this.usersId = (Map<String, User>) config.getServletContext().getAttribute("usersId");
+        this.usersId = (Map<User, Integer>) config.getServletContext().getAttribute("usersId");
+        this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
+        this.compteur = (int) config.getServletContext().getAttribute("compteur");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        // /election/ballots
+        /** /election/ballots **/
         if (uri.size() == 2) {
             String token = request.getHeader("Authorization");
             if (!ElectionM1if03JwtHelper.verifyAdmin(token)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur.");
                 return;
             }
-
-            List<String> urls = new ArrayList<>();
-            for (int i = 0; i < ballots.size(); i++) {
-                urls.add(request.getRequestURL().toString() + "/" + i);
-            }
-            request.setAttribute("DTO", urls);
-
-            APIResponseUtils.buildJson(response, request.getAttribute("DTO"));
+            BallotsDTO ballotsDTO = new BallotsDTO(ballotsId, request.getRequestURL().toString());
+            request.setAttribute("DTO", ballotsDTO);
         }
-        // /election/ballots/{ballotId}
+
+        /** /election/ballots/{ballotId} **/
         else if (uri.size() == 3) {
-            String uuid = uri.get(2);
-            User user = usersId.get(uuid);
+            Integer id = Integer.parseInt(uri.get(2));
             String token = request.getHeader("Authorization");
+            User user = null;
+
+            for (Map.Entry<User, Integer> userEntry : usersId.entrySet()) {
+                if (userEntry.getValue().equals(id)) user = userEntry.getKey();
+            }
 
             if (user == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ballot non trouvé.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Ballot non trouvé.");
                 return;
             }
 
             if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin())) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }
 
-            if (ballotsId.get(uuid) == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ballot non trouvé.");
+            if (ballotsId.get(id) == null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Ballot non trouvé.");
                 return;
             }
 
-            int i = 0;
-            for (String utilisateur : ballots.keySet()) {
-                if (utilisateur.equals(user.getLogin())) {
-                    String url = request.getRequestURL().toString().replace("ballots/" + uri.get(2), "vote/" + i);
-                    APIResponseUtils.buildJson(response, Arrays.asList(url));
-                    return;
-                }
-                i++;
-            }
+            BallotByIdDTO ballotByIdDTO = new BallotByIdDTO(id, request.getRequestURL().toString().substring(0, request.getRequestURL().toString().indexOf("/ballots")));
+            request.setAttribute("DTO", ballotByIdDTO);
         }
-        // /election/ballots/byUser/{userId}
+
+        /** /election/ballots/byUser/{userId} **/
         else if (uri.size() == 4) {
             String login = uri.get(3).replaceAll("%20", " ");
-
             String token = request.getHeader("Authorization");
+            User user = users.get(login);
+
+
             if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(login)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }
 
-            if (ballots.get(login) == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ballot non trouvé.");
+            if (ballots.get(login) == null || user == null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Ballot non trouvé.");
                 return;
             }
 
-            int i = 0;
-            for (String user : ballots.keySet()) {
-                if (user.equals(login)) {
-                    String url = request.getRequestURL().toString().replace("ballots/byUser/" + uri.get(3), "vote/" + i);
-                    APIResponseUtils.buildJson(response, Arrays.asList(url));
-                    return;
-                }
-                i++;
-            }
+            Integer id = usersId.get(user);
+
+            BallotByUserDTO
+                    ballotByUserDTO = new BallotByUserDTO(id, request.getRequestURL().toString().substring(0, request.getRequestURL().toString().indexOf("/byUser")));
+            request.setAttribute("DTO", ballotByUserDTO);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        //election/ballots
+        /** /election/ballots **/
         if (uri.size() == 2) {
             Candidat candidat = candidats.get(request.getParameter("nomCandidat"));
 
             if (candidat == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
+                request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+                request.setAttribute("errorMessage", "Paramètres de la requête non acceptables.");
                 return;
             }
 
             String token = request.getHeader("Authorization");
             String login = ElectionM1if03JwtHelper.verifyToken(token, request);
-            String uuid = UUID.nameUUIDFromBytes(login.getBytes()).toString();
+
+            compteur++;
 
             Bulletin bulletin = new Bulletin(candidat);
             bulletins.add(bulletin);
             Ballot ballot = new Ballot(bulletin);
             ballots.put(login, ballot);
-            ballotsId.put(uuid, ballot);
-            response.setStatus(HttpServletResponse.SC_CREATED);
+            ballotsId.put(compteur, ballot);
+            usersId.put(users.get(login), compteur);
+
+            request.setAttribute("statusCode", HttpServletResponse.SC_CREATED);
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Requête non reconnue");
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "Requête non reconnue.");
             return;
         }
 
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        //election/ballots/{ballotId}
+        /** /election/ballots/{ballotId} **/
         if (uri.size() == 3) {
-            String uuid = uri.get(2);
-            User user = usersId.get(uuid);
+            Integer id = Integer.parseInt(uri.get(2));
             String token = request.getHeader("Authorization");
 
+            User user = null;
+
+            for (Map.Entry<User, Integer> userEntry : usersId.entrySet()) {
+                if (userEntry.getValue().equals(id)) user = userEntry.getKey();
+            }
+
             if (user == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ballot non trouvé.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Ballot non trouvé.");
                 return;
             }
 
             if (!ElectionM1if03JwtHelper.verifyAdmin(token) && !ElectionM1if03JwtHelper.verifyToken(token, request).equals(user.getLogin())) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur ou non propriétaire du ballot.");
                 return;
             }
 
-            if (ballotsId.get(uuid) == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ballot non trouvé.");
+            if (ballotsId.get(id) == null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Ballot non trouvé.");
                 return;
             }
 
             ballots.remove(user.getLogin());
-            ballotsId.remove(uuid);
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            ballotsId.remove(id);
+            usersId.remove(user);
 
+            request.setAttribute("statusCode", HttpServletResponse.SC_NO_CONTENT);
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Requête non reconnue");
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "Requête non reconnue.");
             return;
         }
     }
