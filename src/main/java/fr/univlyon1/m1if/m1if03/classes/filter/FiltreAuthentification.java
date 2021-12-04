@@ -17,7 +17,7 @@ public class FiltreAuthentification extends HttpFilter {
 
     private final String[] authorizedURIs = {
             "/index.html",
-            "/static/votes.css",
+            "/static/vote.css",
             "/election/resultats",
             "/election/candidats",
             "/election/candidats/noms",
