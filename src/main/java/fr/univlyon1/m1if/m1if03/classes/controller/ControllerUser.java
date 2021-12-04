@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
+import fr.univlyon1.m1if.m1if03.classes.dto.UserDTO;
+import fr.univlyon1.m1if.m1if03.classes.dto.UsersDTO;
 import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
@@ -22,104 +23,110 @@ import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 @WebServlet(name = "ControllerUser", value = {})
 public class ControllerUser extends HttpServlet {
 
-    Map<String, User> users = null;
-    Map<String, User> usersId = null;
-    Map<String, Ballot> ballots = null;
-    List<String> uri;
+    private List<String> expiredTokens = null;
+
+    private Map<String, User> users = null;
+    private Map<User, Integer> usersId = null;
+    private Map<String, Ballot> ballots = null;
+    private List<String> uri;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.users = (Map<String, User>) config.getServletContext().getAttribute("users");
-        this.usersId = (Map<String, User>) config.getServletContext().getAttribute("usersId");
+        this.usersId = (Map<User, Integer>) config.getServletContext().getAttribute("usersId");
         this.ballots = (Map<String, Ballot>) config.getServletContext().getAttribute("ballots");
+        this.expiredTokens = (List<String>) config.getServletContext().getAttribute("expiredTokens");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        // /users
+        /** /users **/
         if (uri.size() == 1) {
-            List<String> urls = new ArrayList<>();
-            for (User user : users.values()) {
-                urls.add(request.getRequestURL() + "/" + user.getNom());
-            }
-            APIResponseUtils.buildJson(response, urls);
+            UsersDTO usersDTO = new UsersDTO(users.values().stream().collect(Collectors.toList()), request.getRequestURL().toString());
+            request.setAttribute("DTO", usersDTO);
+            request.setAttribute("statusCode", HttpServletResponse.SC_OK);
         }
 
-        // /users/{userId}
+        /** /users/{userId} **/
         else if (uri.size() == 2) {
 
             String login = uri.get(1).replaceAll("%20", " ");
             String token = (String) request.getAttribute("token");
 
             if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou pas celui qui est logué.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur ou pas celui qui est logué.");
                 return;
             }
 
             User user = users.get(login);
-            if (user == null) response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé.");
-            else APIResponseUtils.buildJson(response, user);
+
+            if (user == null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Utilisateur non trouvé.");
+            } else {
+                UserDTO userDTO = new UserDTO(user);
+                request.setAttribute("DTO", userDTO);
+            }
 
         } else if (uri.size() == 3) {
 
-            // /users/{userId}/vote
+            /** /users/{userId}/vote **/
             if (uri.get(2).equals("vote")) {
                 String login = uri.get(1).replaceAll("%20", " ");
                 String token = (String) request.getAttribute("token");
+                User user = users.get(login);
 
                 if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du vote.");
+                    request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                    request.setAttribute("errorMessage", "Utilisateur non administrateur ou non propriétaire du vote.");
                     return;
                 }
 
-                if (ballots.get(login) == null || users.get(login) == null) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Vote ou utilisateur non trouvé.");
+                if (ballots.get(login) == null || user == null) {
+                    request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                    request.setAttribute("errorMessage", "Vote ou utilisateur non trouvé.");
                     return;
                 }
 
-                int i = 0;
-                for (String utilisateur : ballots.keySet()) {
-                    if (utilisateur.equals(login)) {
-                        response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/vote", "/election/vote/" + i));
-                        return;
-                    }
-                    i++;
-                }
+                Integer id = usersId.get(user);
+
+                response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/vote", "/election/vote/" + id));
             }
 
-            // /users/{userId}/ballot
+            /** /users/{userId}/ballot **/
             else if (uri.get(2).equals("ballot")) {
                 String login = uri.get(1).replaceAll("%20", " ");
                 String token = (String) request.getAttribute("token");
+                User user = users.get(login);
 
                 if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou non propriétaire du ballot.");
+                    request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                    request.setAttribute("errorMessage", "Utilisateur non administrateur ou non propriétaire du ballot.");
                     return;
                 }
 
-                if (ballots.get(login) == null || users.get(login) == null) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Vote ou utilisateur non trouvé.");
+                if (ballots.get(login) == null || user == null) {
+                    request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                    request.setAttribute("errorMessage", "Vote ou utilisateur non trouvé.");
                     return;
                 }
 
-                int i = 0;
-                for (String utilisateur : ballots.keySet()) {
-                    if (utilisateur.equals(login)) {
-                        response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/ballot", "/election/ballots/" + i));
-                        return;
-                    }
-                    i++;
-                }
+                Integer id = usersId.get(user);
+
+                response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/ballot", "/election/ballots/" + id));
             } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "requête non reconnue");
+                request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+                request.setAttribute("errorMessage", "Requête non reconnue.");
                 return;
             }
 
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "requête non reconnue");
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "Requête non reconnue.");
             return;
         }
     }
@@ -128,10 +135,11 @@ public class ControllerUser extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        // /users/login
+        /** /users/login **/
         if (uri.get(1).equals("login")) {
             if (request.getParameter("login") == null || request.getParameter("nom") == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables");
+                request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+                request.setAttribute("errorMessage", "Paramètres de la requête non acceptables.");
                 return;
             }
 
@@ -142,19 +150,34 @@ public class ControllerUser extends HttpServlet {
             User user = new User(login, nom, admin);
 
             String token = ElectionM1if03JwtHelper.generateToken(user.getLogin(), user.isAdmin(), request);
-            response.setHeader("Authorization", "Bearer " + token);
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            request.setAttribute("Authorization", "Bearer " + token);
+            request.setAttribute("statusCode", HttpServletResponse.SC_NO_CONTENT);
             request.setAttribute("token", token);
             request.setAttribute("user", user);
 
-            String uuid = UUID.nameUUIDFromBytes(login.getBytes()).toString();
-
             users.put(login, user);
-            usersId.put(uuid, user);
         }
 
-        // /users/logout
+        /** /users/logout **/
         else if (uri.get(1).equals("logout")) {
+            String token = request.getHeader("Authorization");
+
+            if (token == null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_UNAUTHORIZED);
+                request.setAttribute("errorMessage", "Utilisateur non authentifié.");
+                return;
+            }
+
+            try {
+                ElectionM1if03JwtHelper.verifyToken(token, request);
+            } catch (Exception e) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_UNAUTHORIZED);
+                request.setAttribute("errorMessage", "Utilisateur non authentifié.");
+                return;
+            }
+
+            expiredTokens.add(token);
+            request.setAttribute("expiredTokens", expiredTokens);
             response.sendRedirect("../index.html");
         }
     }
@@ -163,40 +186,44 @@ public class ControllerUser extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
-        // /users/{usersId}/nom
+        /** /users/{usersId}/nom **/
         if (uri.get(2).equals("nom")) {
-
             String login = uri.get(1).replaceAll("%20", " ");
             String token = (String) request.getAttribute("token");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 
-            String nom = br.readLine().replaceAll("nom=", "").replaceAll("%20", " ");
+            String nom = br.readLine();
 
             if (nom == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Paramètres de la requête non acceptables.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+                request.setAttribute("errorMessage", "Paramètres de la requête non acceptables.");
                 return;
             }
 
+            nom = nom.replaceAll("nom=", "").replaceAll("%20", " ");
+
             if (!ElectionM1if03JwtHelper.verifyToken(token, request).equals(login) && !ElectionM1if03JwtHelper.verifyAdmin(token)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur ou pas celui qui est logué.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
+                request.setAttribute("errorMessage", "Utilisateur non administrateur ou pas celui qui est logué.");
                 return;
             }
 
             User user = users.get(login);
+
             if (user == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Utilisateur non trouvé.");
+                request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
+                request.setAttribute("errorMessage", "Utilisateur non trouvé.");
                 return;
             }
 
             user.setNom(nom);
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT, "User correctement modifié.");
-
+            request.setAttribute("statusCode", HttpServletResponse.SC_NO_CONTENT);
+            request.setAttribute("successMessage", "Utilisateur correctement modifié.");
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Requête non reconnue");
+            request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+            request.setAttribute("errorMessage", "Requête non reconnue.");
             return;
         }
-
-        this.getServletContext().getRequestDispatcher("/WEB-INF/components/profil.jsp").forward(request, response);
     }
 }

@@ -1,11 +1,11 @@
-package fr.univlyon1.m1if.m1if03.classes.model;
+package fr.univlyon1.m1if.m1if03.classes.dto;
 
-public class VotesJSON {
+public class VotesDTO {
 
     public String nomCandidat;
     public int votes;
 
-    public VotesJSON(String nomCandidat, int votes) {
+    public VotesDTO(String nomCandidat, int votes) {
         this.nomCandidat = nomCandidat;
         this.votes = votes;
     }

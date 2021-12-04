@@ -11,14 +11,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @WebServlet(name = "Init", value = "/init", loadOnStartup = 1)
 public class Init extends HttpServlet {
@@ -29,12 +26,13 @@ public class Init extends HttpServlet {
 
         Map<String, Candidat> candidats;
         Map<String, User> users = new HashMap<>();
-        // K -> user uuid
-        Map<String, User> usersId = new HashMap<>();
+        Map<User, Integer> usersId = new HashMap<>();
         Map<String, Ballot> ballots = new HashMap<>();
-        // K -> user uuid
         Map<String, Ballot> ballotsId = new HashMap<>();
         List<Bulletin> bulletins = new ArrayList<>();
+        List<String> expiredTokens = new ArrayList<>();
+
+        int compteur = -1;
 
         ServletContext context = config.getServletContext();
         context.setAttribute("users", users);
@@ -42,6 +40,8 @@ public class Init extends HttpServlet {
         context.setAttribute("ballots", ballots);
         context.setAttribute("ballotsId", ballotsId);
         context.setAttribute("bulletins", bulletins);
+        context.setAttribute("expiredTokens", expiredTokens);
+        context.setAttribute("compteur", compteur);
 
         try {
             candidats = CandidatListGenerator.getCandidatList();

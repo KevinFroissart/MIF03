@@ -16,9 +16,7 @@ import java.util.Map;
 import fr.univlyon1.m1if.m1if03.classes.model.Ballot;
 import fr.univlyon1.m1if.m1if03.classes.model.Bulletin;
 import fr.univlyon1.m1if.m1if03.classes.model.Candidat;
-import fr.univlyon1.m1if.m1if03.classes.model.ElectionJSON;
-import fr.univlyon1.m1if.m1if03.classes.model.VotesJSON;
-import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
+import fr.univlyon1.m1if.m1if03.classes.dto.VotesDTO;
 
 @WebServlet(name = "Resultats", value = {})
 public class Resultats extends HttpServlet {
@@ -47,13 +45,13 @@ public class Resultats extends HttpServlet {
         }
         request.setAttribute("votes", votes);
 
-        List<VotesJSON> election = new ArrayList<>();
+        List<VotesDTO> election = new ArrayList<>();
 
         // /election/resultats
         for (Map.Entry<String, Integer> vote : votes.entrySet()) {
-            election.add(new VotesJSON(vote.getKey(), vote.getValue()));
+            election.add(new VotesDTO(vote.getKey(), vote.getValue()));
         }
 
-        APIResponseUtils.buildJson(response, new ElectionJSON(election));
+        // APIResponseUtils.buildJson(response, new ElectionJSON(election));
     }
 }
