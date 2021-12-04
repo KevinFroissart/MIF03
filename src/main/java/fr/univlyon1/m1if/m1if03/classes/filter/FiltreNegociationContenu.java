@@ -1,6 +1,7 @@
 package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class FiltreNegociationContenu extends HttpFilter {
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         chain.doFilter(request, response);
 
+        Object vue = request.getAttribute("vue");
         Object dto = request.getAttribute("DTO");
         Object errorCode = request.getAttribute("errorCode");
         Object errorMessage = request.getAttribute("errorMessage");
@@ -34,14 +36,18 @@ public class FiltreNegociationContenu extends HttpFilter {
             if (statusCode != null) response.setStatus(Integer.parseInt(statusCode.toString()));
         }
 
-        if (dto != null) {
+        if (dto != null || vue != null) {
             String accept = request.getHeader("Accept");
             String content = request.getHeader("Content-type");
             String serialization = null;
 
             if ((content != null && content.contains("text/html")) || accept.contains("text/html")) {
+                if (vue != null) {
+                    //request.getRequestDispatcher("WEB-INF/components/" + vue).forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/components/" + vue).include(request, response);
+                    //response.sendRedirect(vue.toString());
 
-
+                }
             } else if ((content != null && content.contains("application/xml")) || accept.contains("application/xml")) {
 
 

@@ -145,7 +145,7 @@ public class ControllerUser extends HttpServlet {
 
             String login = request.getParameter("login");
             String nom = request.getParameter("nom");
-            boolean admin = request.getParameter("admin").equals("true");
+            boolean admin = request.getParameter("admin") == null ? false : request.getParameter("admin").equals(true);
 
             User user = new User(login, nom, admin);
 
@@ -154,7 +154,7 @@ public class ControllerUser extends HttpServlet {
             request.setAttribute("statusCode", HttpServletResponse.SC_NO_CONTENT);
             request.setAttribute("token", token);
             request.setAttribute("user", user);
-
+            request.setAttribute("vue", "ballot.jsp");
             users.put(login, user);
         }
 
