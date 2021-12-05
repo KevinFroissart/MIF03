@@ -12,25 +12,25 @@
     <%@include file="menu.jsp" %>
     <article class="contenu">
         <c:choose>
-            <c:when test="${sessionScope.user != null && ballots.get(sessionScope.user.login) == null}">
+            <c:when test="${requestScope.login != null && ballots.get(requestScope.login) == null}">
                 <p>Vous n'avez pas encore voté. Dirigez vous sur <a href="vote">cette page</a> pour voter.</p>
             </c:when>
             <c:otherwise>
-                <form method="post" action="deleteVote">
+                <form method="delete" action="/election/ballots/{ballotId}">
                     <p>
                         Votre vote:
-                        <b>${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getPrenom()}
-                                ${ballots.get(sessionScope.user.login).getBulletin().getCandidat().getNom()}</b>
+                        <b>${ballots.get(requestScope.login).getBulletin().getCandidat().getPrenom()}
+                                ${ballots.get(requestScope.login).getBulletin().getCandidat().getNom()}</b>
                     </p>
                     <p>
                         Nombre total de votes: ${ballots.size()}
                     </p>
                     <p>
-                        <input type="hidden" name="user" value="${sessionScope.user.login}">
+                        <input type="hidden" name="user" value="${requestScope.login}">
                         <input type="submit" name="action" value="supprimer">
                     </p>
                 </form>
             </c:otherwise>
         </c:choose>
     </article>
-<%@include file="footer.html" %>
+    <%@include file="footer.html" %>

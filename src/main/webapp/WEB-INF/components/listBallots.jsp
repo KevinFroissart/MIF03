@@ -10,11 +10,11 @@
 <main id="contenu" class="wrapper">
     <jsp:include page="menu.jsp"/>
     <article class="contenu">
-        <h2>Voici la liste des <c:out value="${ballots.size()}" /> votants</h2>
+        <h2>Voici la liste des <c:out value="${ballots.size()}"/> votants</h2>
         <ul>
             <c:forEach items="${ballots}" var="ballotEntry">
                 <li>
-                    <form action="deleteVote" method="post">
+                    <form action="/election/ballots/{ballotId}" method="delete">
                         <c:out value="${ballotEntry.key}"/>
                         <input type="hidden" name="user" value="${ballotEntry.key}">
                         <input type="submit" value="supprimer">
@@ -23,4 +23,4 @@
             </c:forEach>
         </ul>
     </article>
-<%@include file="footer.html" %>
+    <%@include file="footer.html" %>

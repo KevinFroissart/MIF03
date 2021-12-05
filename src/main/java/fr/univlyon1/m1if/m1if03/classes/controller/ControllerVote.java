@@ -101,6 +101,7 @@ public class ControllerVote extends HttpServlet {
 
             VoteByUserDTO voteByUserDTO = new VoteByUserDTO(usersId.get(user), request.getRequestURL().toString().substring(0, request.getRequestURL().toString().indexOf("/byUser")));
             request.setAttribute("DTO", voteByUserDTO);
+            request.setAttribute("vue", "vote.jsp");
         }
     }
 
