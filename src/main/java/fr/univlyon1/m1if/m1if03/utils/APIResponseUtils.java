@@ -1,6 +1,7 @@
 package fr.univlyon1.m1if.m1if03.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class APIResponseUtils {
 
-    public static List<String> splitUri(String url){
+    public static List<String> splitUri(String url) {
         List<String> uri = new LinkedList<>(Arrays.asList(url.split("/")));
         uri.remove(0);
         uri.remove(0);
@@ -24,5 +25,10 @@ public class APIResponseUtils {
         return objectMapper.writeValueAsString(object);
     }
 
+    public static String buildXml(HttpServletResponse response, Object object) throws IOException {
+        response.setContentType("application/xml");
+        XmlMapper xmlMapper = new XmlMapper();
+        return xmlMapper.writeValueAsString(object);
+    }
 
 }

@@ -43,18 +43,16 @@ public class FiltreNegociationContenu extends HttpFilter {
             String serialization = null;
 
             if ((content != null && content.contains("text/html")) || accept.contains("text/html")) {
-                if (vue != null) {
+                if (vue != null)
                     request.getServletContext().getRequestDispatcher("/WEB-INF/components/" + vue).include(request, response);
-                }
             } else if ((content != null && content.contains("application/xml")) || accept.contains("application/xml")) {
-
-
+                serialization = APIResponseUtils.buildXml(response, dto);
             } else if ((content != null && content.contains("application/json")) || accept.contains("application/json") || accept.contains("*/*")) {
                 serialization = APIResponseUtils.buildJson(response, dto);
-                if (statusCode != null) response.setStatus(Integer.parseInt(statusCode.toString()));
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
             }
+            if (statusCode != null) response.setStatus(Integer.parseInt(statusCode.toString()));
             if (serialization != null) {
                 PrintWriter out = response.getWriter();
                 out.print(serialization);
