@@ -96,7 +96,8 @@ public class ControllerUser extends HttpServlet {
 
                 Integer id = usersId.get(user);
 
-                response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/vote", "/election/vote/" + id));
+                request.setAttribute("statusCode", HttpServletResponse.SC_SEE_OTHER);
+                request.setAttribute("Location", request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/vote", "/election/votes/" + id));
             }
 
             /** /users/{userId}/ballot **/
@@ -119,7 +120,8 @@ public class ControllerUser extends HttpServlet {
 
                 Integer id = usersId.get(user);
 
-                response.sendRedirect(request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/ballot", "/election/ballots/" + id));
+                request.setAttribute("statusCode", HttpServletResponse.SC_SEE_OTHER);
+                request.setAttribute("Location", request.getRequestURL().toString().replaceAll("/users/" + uri.get(1) + "/ballot", "/election/ballots/" + id));
             } else {
                 request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
                 request.setAttribute("errorMessage", "Requête non reconnue.");
