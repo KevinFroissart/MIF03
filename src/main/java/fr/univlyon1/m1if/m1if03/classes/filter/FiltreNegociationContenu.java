@@ -24,6 +24,7 @@ public class FiltreNegociationContenu extends HttpFilter {
         Object errorMessage = request.getAttribute("errorMessage");
         Object statusCode = request.getAttribute("statusCode");
         Object authorization = request.getAttribute("Authorization");
+        Object location = request.getAttribute("Location");
 
         if (errorCode != null) {
             if (errorMessage != null)
@@ -59,7 +60,10 @@ public class FiltreNegociationContenu extends HttpFilter {
                 out.flush();
             }
         } else {
-            if (statusCode != null) response.setStatus(Integer.parseInt(statusCode.toString()));
+            if (statusCode != null) {
+                if (location != null) response.setHeader("Location", location.toString());
+                response.setStatus(Integer.parseInt(statusCode.toString()));
+            }
         }
     }
 }
