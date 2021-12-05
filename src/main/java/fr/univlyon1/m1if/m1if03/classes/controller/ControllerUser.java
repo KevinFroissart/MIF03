@@ -67,10 +67,12 @@ public class ControllerUser extends HttpServlet {
             if (user == null) {
                 request.setAttribute("errorCode", HttpServletResponse.SC_NOT_FOUND);
                 request.setAttribute("errorMessage", "Utilisateur non trouvé.");
-            } else {
-                UserDTO userDTO = new UserDTO(user);
-                request.setAttribute("DTO", userDTO);
+                return;
             }
+
+            UserDTO userDTO = new UserDTO(user);
+            request.setAttribute("DTO", userDTO);
+            request.setAttribute("vue", "profil.jsp");
 
         } else if (uri.size() == 3) {
 
@@ -132,7 +134,7 @@ public class ControllerUser extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
         /** /users/login **/
@@ -154,13 +156,12 @@ public class ControllerUser extends HttpServlet {
             request.setAttribute("statusCode", HttpServletResponse.SC_NO_CONTENT);
             request.setAttribute("token", token);
             request.setAttribute("user", user);
-            request.setAttribute("vue", "ballot.jsp");
             users.put(login, user);
         }
 
         /** /users/logout **/
         else if (uri.get(1).equals("logout")) {
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
 
             if (token == null) {
                 request.setAttribute("errorCode", HttpServletResponse.SC_UNAUTHORIZED);
@@ -183,7 +184,7 @@ public class ControllerUser extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
 
         /** /users/{usersId}/nom **/

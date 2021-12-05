@@ -50,7 +50,7 @@ public class ControllerBallots extends HttpServlet {
 
         /** /election/ballots **/
         if (uri.size() == 2) {
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
             if (!ElectionM1if03JwtHelper.verifyAdmin(token)) {
                 request.setAttribute("errorCode", HttpServletResponse.SC_FORBIDDEN);
                 request.setAttribute("errorMessage", "Utilisateur non administrateur.");
@@ -58,12 +58,13 @@ public class ControllerBallots extends HttpServlet {
             }
             BallotsDTO ballotsDTO = new BallotsDTO(ballotsId, request.getRequestURL().toString());
             request.setAttribute("DTO", ballotsDTO);
+            request.setAttribute("vue", "listBallots.jsp");
         }
 
         /** /election/ballots/{ballotId} **/
         else if (uri.size() == 3) {
             Integer id = Integer.parseInt(uri.get(2));
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
             User user = null;
 
             for (Map.Entry<User, Integer> userEntry : usersId.entrySet()) {
@@ -95,7 +96,7 @@ public class ControllerBallots extends HttpServlet {
         /** /election/ballots/byUser/{userId} **/
         else if (uri.size() == 4) {
             String login = uri.get(3).replaceAll("%20", " ");
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
             User user = users.get(login);
 
 
@@ -133,8 +134,14 @@ public class ControllerBallots extends HttpServlet {
                 return;
             }
 
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
             String login = ElectionM1if03JwtHelper.verifyToken(token, request);
+
+            if (ballots.get(login) != null) {
+                request.setAttribute("errorCode", HttpServletResponse.SC_BAD_REQUEST);
+                request.setAttribute("errorMessage", "Un vote existe déjà pour cet utilisateur.");
+                return;
+            }
 
             compteur++;
 
@@ -161,7 +168,7 @@ public class ControllerBallots extends HttpServlet {
         /** /election/ballots/{ballotId} **/
         if (uri.size() == 3) {
             Integer id = Integer.parseInt(uri.get(2));
-            String token = request.getHeader("Authorization");
+            String token = request.getAttribute("token").toString();
 
             User user = null;
 

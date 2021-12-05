@@ -13,8 +13,8 @@
 </head>
 <body>
 <header>
-    <c:if test="${sessionScope.user != null}">
-        <p class="header-user"> Bonjour ${sessionScope.user.nom}</p>
+    <c:if test="${requestScope.login != null}">
+        <p class="header-user"> Bonjour ${requestScope.login}</p>
     </c:if>
     <h1 class="header-titre">${param.titre}</h1>
 </header>

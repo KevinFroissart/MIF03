@@ -52,7 +52,9 @@ public class ControllerResultats extends HttpServlet {
             election.add(new VotesDTO(vote.getKey(), vote.getValue()));
         }
 
+        request.setAttribute("votes", votes);
         request.setAttribute("DTO", election);
+        request.setAttribute("vue", "resultats.jsp");
     }
 
 }

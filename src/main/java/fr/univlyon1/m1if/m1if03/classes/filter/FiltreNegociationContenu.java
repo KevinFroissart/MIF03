@@ -1,7 +1,6 @@
 package fr.univlyon1.m1if.m1if03.classes.filter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
+import fr.univlyon1.m1if.m1if03.utils.BufferlessHttpServletResponseWrapper;
 
 public class FiltreNegociationContenu extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(request, response);
+//        HttpServletResponse wrapper = new BufferlessHttpServletResponseWrapper(response);
+        super.doFilter(request, response, chain);
 
         Object vue = request.getAttribute("vue");
         Object dto = request.getAttribute("DTO");
@@ -43,10 +44,7 @@ public class FiltreNegociationContenu extends HttpFilter {
 
             if ((content != null && content.contains("text/html")) || accept.contains("text/html")) {
                 if (vue != null) {
-                    //request.getRequestDispatcher("WEB-INF/components/" + vue).forward(request, response);
-                    request.getRequestDispatcher("/WEB-INF/components/" + vue).include(request, response);
-                    //response.sendRedirect(vue.toString());
-
+                    request.getServletContext().getRequestDispatcher("/WEB-INF/components/" + vue).include(request, response);
                 }
             } else if ((content != null && content.contains("application/xml")) || accept.contains("application/xml")) {
 

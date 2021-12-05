@@ -19,6 +19,7 @@ public class FiltreAuthentification extends HttpFilter {
             "/index.html",
             "/static/vote.css",
             "/election/resultats",
+            "/resultats.jsp",
             "/election/candidats",
             "/election/candidats/noms",
             "/users/login",
@@ -49,7 +50,7 @@ public class FiltreAuthentification extends HttpFilter {
         }
 
         if (req.getHeader("Authorization") != null) {
-            String token = req.getHeader("Authorization");
+            String token = req.getHeader("Authorization").replace("Bearer ", "");
 
             List<String> expiredTokens = (List<String>) req.getServletContext().getAttribute("expiredTokens");
 
@@ -59,8 +60,9 @@ public class FiltreAuthentification extends HttpFilter {
             }
 
             try {
-                ElectionM1if03JwtHelper.verifyToken(token, req);
+                String login = ElectionM1if03JwtHelper.verifyToken(token, req);
                 req.setAttribute("token", token);
+                req.setAttribute("login", login);
                 super.doFilter(req, res, chain);
                 return;
             } catch (Exception e) {
