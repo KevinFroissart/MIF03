@@ -7,47 +7,69 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
-import fr.univlyon1.m1if.m1if03.classes.model.User;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
-@WebFilter(filterName = "/LoginFilter")
+@WebFilter(filterName = "FiltreAuthentification", urlPatterns = "/*")
 public class FiltreAuthentification extends HttpFilter {
 
-	@Override
-	public void init(FilterConfig config) throws ServletException {
-		super.init(config);
-	}
+    private final String[] authorizedURIs = {
+            "/index.html",
+            "/static/vote.css",
+            "/election/resultats",
+            "/resultats.jsp",
+            "/election/candidats",
+            "/election/candidats/noms",
+            "/users/login",
+            "/users/logout"
+    };
 
-	@Override
-	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-		try {
-			request.setCharacterEncoding("UTF-8");
-			HttpSession session = request.getSession(true);
-			String login = request.getParameter("login");
-			User utilisateur = (User) session.getAttribute("user");
-			String uri = request.getRequestURI().substring(getServletContext().getContextPath().length());
+    @Override
+    public void init(FilterConfig config) throws ServletException {
+        super.init(config);
+    }
 
-			boolean utilisateurConnecte = utilisateur != null && !utilisateur.getLogin().equals("");
-			boolean provientFormulaireAuth = request.getRequestURI() != null && uri.equals("/election/vote");
-			boolean ressourceStatic = uri.contains(".css") || uri.equals("/") || uri.endsWith("/index.html");
-			boolean ressourceAutorisee = uri.endsWith("/resultats.jsp") || uri.endsWith("/resultats");
-			boolean loginNonNull = login != null && !login.equals("");
+    @Override
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        String currentUri = req.getRequestURI().replace(req.getContextPath(), "");
 
-			if (utilisateurConnecte || ressourceStatic || ressourceAutorisee) {
-				chain.doFilter(request, response);
-			} else if(provientFormulaireAuth && loginNonNull){
-				session.setAttribute("user", new User(login,
-						request.getParameter("nom") != null ? request.getParameter("nom") : "",
-						request.getParameter("admin") != null && request.getParameter("admin").equals("on")));
-				chain.doFilter(request, response);
-			} else {
-				response.sendRedirect("index.html");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
+        // Traitement de l'URL racine
+        if (currentUri.equals("/")) {
+            res.sendRedirect("index.html");
+            return;
+        }
+
+        // Traitement des autres URLs autorisées sans authentification
+        for (String authorizedUri : authorizedURIs) {
+            if (currentUri.endsWith(authorizedUri)) {
+                super.doFilter(req, res, chain);
+                return;
+            }
+        }
+
+        if (req.getHeader("Authorization") != null) {
+            String token = req.getHeader("Authorization").replace("Bearer ", "");
+
+            List<String> expiredTokens = (List<String>) req.getServletContext().getAttribute("expiredTokens");
+
+            if (expiredTokens != null && expiredTokens.contains(token)) {
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous devez être authentifié pour accéder à cette page.");
+                return;
+            }
+
+            try {
+                String login = ElectionM1if03JwtHelper.verifyToken(token, req);
+                req.setAttribute("token", token);
+                req.setAttribute("login", login);
+                super.doFilter(req, res, chain);
+                return;
+            } catch (Exception e) {
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous devez être authentifié pour accéder à cette page.");
+                return;
+            }
+        }
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Vous devez être authentifié pour accéder à cette page.");
+    }
 }
