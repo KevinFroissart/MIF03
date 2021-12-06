@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import fr.univlyon1.m1if.m1if03.utils.APIResponseUtils;
-import fr.univlyon1.m1if.m1if03.utils.BufferlessHttpServletResponseWrapper;
 
 public class FiltreNegociationContenu extends HttpFilter {
 
