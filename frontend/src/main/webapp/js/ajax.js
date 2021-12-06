@@ -1,38 +1,38 @@
-//Bilbliothèque de fonctions AJAX permettant l'envoi de requêtes au serveur de manière asynchrone 
-//et le traitement (ajout au corpos du document appelant) de réponses en XML conformes à la structure décrite dans l'énoncé du devoir.
+//Bilbliothï¿½que de fonctions AJAX permettant l'envoi de requï¿½tes au serveur de maniï¿½re asynchrone 
+//et le traitement (ajout au corpos du document appelant) de rï¿½ponses en XML conformes ï¿½ la structure dï¿½crite dans l'ï¿½noncï¿½ du devoir.
 
 //--------------------Fonctions principales---------------------
 
-//fonction principale, qui envoie la  requête au serveur de façon asynchrone et positionne la fonction qui va traiter les données
+//fonction principale, qui envoie la  requï¿½te au serveur de faï¿½on asynchrone et positionne la fonction qui va traiter les donnï¿½es
 function loadXMLAsynchroneously(method, request, parameters, id)
 {
     //initialisation de l'objet XMLXhttpRequest
     var xhr = initRequete ();
 
-    //spécification de la fonction de traitement à appeler au retour serveur (car chargement asynchrone)
+    //spï¿½cification de la fonction de traitement ï¿½ appeler au retour serveur (car chargement asynchrone)
 	var XMLDoc = null;
     xhr.onreadystatechange = function() { getXMLDocument(xhr, XMLDoc, id); };
     
-    //envoi de la requête de chargement du fichier XML au serveur
-	//le dernier paramètre est true ; le chargement du fichier se fera en asynchrone
+    //envoi de la requï¿½te de chargement du fichier XML au serveur
+	//le dernier paramï¿½tre est true ; le chargement du fichier se fera en asynchrone
     xhr.open(method, request, true);
-    //encodage des paramètres dans la requête, si la méthode est post
+    //encodage des paramï¿½tres dans la requï¿½te, si la mï¿½thode est post
 	if(parameters && (method == "post" || method == "POST"))
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
     xhr.send(parameters);
 }
 
-//autre fonction principale, plus simple, qui envoie la requête au serveur de façon asynchrone et ne se préoccupe pas de la réponse
-//remarque : l'utilisation de cette fonction n'est pas nécessaire pour réaliser le devoir.
+//autre fonction principale, plus simple, qui envoie la requï¿½te au serveur de faï¿½on asynchrone et ne se prï¿½occupe pas de la rï¿½ponse
+//remarque : l'utilisation de cette fonction n'est pas nï¿½cessaire pour rï¿½aliser le devoir.
 function sendRequestAsynchroneously(method, request, parameters)
 {
     //initialisation de l'objet XMLXhttpRequest
     var xhr = initRequete ();
 
-    //envoi de la requête de chargement du fichier XML au serveur
-	//le dernier paramètre est true ; le chargement du fichier se fera en asynchrone
+    //envoi de la requï¿½te de chargement du fichier XML au serveur
+	//le dernier paramï¿½tre est true ; le chargement du fichier se fera en asynchrone
     xhr.open(method, request, true);
-    //encodage des paramètres dans la requête, si la méthode est post
+    //encodage des paramï¿½tres dans la requï¿½te, si la mï¿½thode est post
 	if(parameters && (method == "post" || method == "POST"))
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 	xhr.send(parameters);
@@ -40,39 +40,39 @@ function sendRequestAsynchroneously(method, request, parameters)
 
 //--------------------------fonctions secondaires---------------------------
 
-//fonction appelée lors de la réception de la réponse, si la fonction principale loadXMLAsynchroneously() a été utilisée.
+//fonction appelï¿½e lors de la rï¿½ception de la rï¿½ponse, si la fonction principale loadXMLAsynchroneously() a ï¿½tï¿½ utilisï¿½e.
 function getXMLDocument(xhr, XMLDoc, id)
 {
-    // teste si la réponse est disponible
+    // teste si la rï¿½ponse est disponible
 	if (xhr.readyState==4) {
-		// teste si la réponse est arrivée et contient des données (code HTTP = 200 : OK)
+		// teste si la rï¿½ponse est arrivï¿½e et contient des donnï¿½es (code HTTP = 200 : OK)
 		if (xhr.status == 200) {
-			// teste si la réponse est arrivée en XML ou en texte (peut arriver pour certaines configurations d'Apache)
+			// teste si la rï¿½ponse est arrivï¿½e en XML ou en texte (peut arriver pour certaines configurations d'Apache)
 			if (xhr.responseXML != null) {
 				XMLDoc= xhr.responseXML;
 			} else if (xhr.responseText != null) {
-				//si la réponse est en texte, transformation en XML (voir fonction façade plus bas)
+				//si la rï¿½ponse est en texte, transformation en XML (voir fonction faï¿½ade plus bas)
 				XMLDoc= parseFromString(xhr.responseText);
 			}
-			//Décommentez la ligne suivante pour voir le contenu XML obtenu (ne marche qu'avec FF)
+			//Dï¿½commentez la ligne suivante pour voir le contenu XML obtenu (ne marche qu'avec FF)
 			//alert((new XMLSerializer()).serializeToString(XMLDoc));
 			
-			//appel de la fonction de traitement qui va ajouter les données au corps de la page (à écrire)
+			//appel de la fonction de traitement qui va ajouter les donnï¿½es au corps de la page (ï¿½ ï¿½crire)
 			traiteXML (XMLDoc, id);
 		
-		//teste si le code de statut est autre que le code renvoyé en cas d'absence de nouveaux messages.
+		//teste si le code de statut est autre que le code renvoyï¿½ en cas d'absence de nouveaux messages.
 		//Remarque : le code 1223 provient d'un bug avec IE : http://trac.dojotoolkit.org/ticket/2418
 		} else if (xhr.status >= 400 && xhr.status != 1223) {
-		   alert("Un problème est survenu avec la requête : ");
+		   alert("Un problï¿½me est survenu avec la requï¿½te : ");
         }
 	}
 }
 
-//----------------------Fonctions façades----------------------------
-//permettent de masquer les différences entre les navigateurs
-//remarque : ces fonctions ont uniquement été testées avec FF et IE7
+//----------------------Fonctions faï¿½ades----------------------------
+//permettent de masquer les diffï¿½rences entre les navigateurs
+//remarque : ces fonctions ont uniquement ï¿½tï¿½ testï¿½es avec FF et IE7
 
-//fonction façade qui teste le type de navigateur et renvoie un objet capable de se charger de l'envoi de la requête.
+//fonction faï¿½ade qui teste le type de navigateur et renvoie un objet capable de se charger de l'envoi de la requï¿½te.
 function initRequete()
 {
     var xhr = null;
@@ -86,8 +86,8 @@ function initRequete()
 	return xhr;
 }
 
-//fonction façade qui reçoit une chaîne de caractères et la parse en XML pour renvoyer un objet DOM.
-//remarque : le XML doit être bien formé, sans quoi l'erreur de parsing bloque l'exécution du script.
+//fonction faï¿½ade qui reï¿½oit une chaï¿½ne de caractï¿½res et la parse en XML pour renvoyer un objet DOM.
+//remarque : le XML doit ï¿½tre bien formï¿½, sans quoi l'erreur de parsing bloque l'exï¿½cution du script.
 function parseFromString (docTXT) {
 	// code for IE
 	if (window.ActiveXObject)
@@ -105,7 +105,7 @@ function parseFromString (docTXT) {
 	return XMLDoc;
 }
 
-//fonction façade qui renvoie le texte contenu dans un élément XML
+//fonction faï¿½ade qui renvoie le texte contenu dans un ï¿½lï¿½ment XML
 function getXMLTextContent(source)
 {
 	if (source.textContent != null) {
