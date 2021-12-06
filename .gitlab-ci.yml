@@ -19,12 +19,14 @@ cache:
 build:
   stage: build
   script:
+    - cd server/
     - mvn compile
     - mvn package
 
 test java:
   stage: test
   script:
+    - cd server/
     - mvn compile && mvn test --batch-mode
 
 deploy:
@@ -35,6 +37,7 @@ deploy:
   dependencies:
     - test java
   script:
+    - cd server/
     - mvn compile
     - mvn package
-    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY server/target/server.war gitlabci@192.168.75.28:/opt/tomcat/webapps/v3.war
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY target/server.war gitlabci@192.168.75.28:/opt/tomcat/webapps/v3.war
