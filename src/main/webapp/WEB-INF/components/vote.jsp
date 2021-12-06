@@ -11,11 +11,11 @@
     <%@include file="menu.jsp" %>
     <article class="contenu">
         <c:choose>
-            <c:when test="${ballots.get(sessionScope.user.login) != null}">
+            <c:when test="${ballots.get(requestScope.login) != null}">
                 <p>Vous avez déjà voté. Vous pouvez consulter votre vote sur <a href="listBallots">cette page</a>. </p>
             </c:when>
             <c:otherwise>
-                <form method="post" action="vote">
+                <form method="post" action="/election/ballots">
                     <label>Sélectionnez un candidat:</label>
                     <select name="candidat" id="selection">
                         <option value="">----</option>
@@ -30,4 +30,4 @@
             </c:otherwise>
         </c:choose>
     </article>
-<%@include file="footer.html" %>
+    <%@include file="footer.html" %>

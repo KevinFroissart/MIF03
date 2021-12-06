@@ -1,31 +1,23 @@
 package fr.univlyon1.m1if.m1if03.classes.filter;
 
-import fr.univlyon1.m1if.m1if03.classes.model.User;
+import fr.univlyon1.m1if.m1if03.utils.ElectionM1if03JwtHelper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "/AutorisationFilter")
+@WebFilter(filterName = "FiltreAutorisation", urlPatterns = {"/election/listBallots", "/election/candidats/update", "/users"})
 public class FiltreAutorisation extends HttpFilter {
-
     @Override
-    public void init(FilterConfig config) throws ServletException {
-        super.init(config);
-    }
-
-    @Override
-    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = request.getSession(true);
-        User utilisateur = (User) session.getAttribute("user");
-        if(utilisateur.isAdmin()){
-            chain.doFilter(request, response);
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        if (ElectionM1if03JwtHelper.verifyAdmin((String) req.getAttribute("token"))) {
+            super.doFilter(req, res, chain);
         } else {
-            request.getRequestDispatcher("../WEB-INF/components/ballot.jsp").forward(request, response);
+//            this.getServletContext().getRequestDispatcher("/WEB-INF/components/ballot.jsp").forward(req, res);
+            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Utilisateur non administrateur.");
         }
     }
 }

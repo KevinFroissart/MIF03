@@ -10,9 +10,9 @@
 <main id="contenu" class="wrapper">
     <%@include file="menu.jsp" %>
     <article class="contenu">
-        <h2>Nom actuel : ${sessionScope.user.nom}</h2>
+        <h2>Nom actuel : ${requestScope.login}</h2>
         <br/>
-        <form method="post" action="user">
+        <form method="put" action="/users/${requestScope.login}/nom">
             <h2>Modifier mon nom:</h2>
             <p>
                 <input type="text" id="name" name="name" required>
@@ -20,4 +20,4 @@
             </p>
         </form>
     </article>
-<%@include file="footer.html" %>
+    <%@include file="footer.html" %>

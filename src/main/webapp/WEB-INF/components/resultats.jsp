@@ -17,4 +17,4 @@
             </c:forEach>
         </ul>
     </article>
-<%@include file="footer.html" %>
+    <%@include file="footer.html" %>

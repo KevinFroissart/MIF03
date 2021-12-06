@@ -10,18 +10,18 @@
     <h2>Menu</h2>
     <ul>
         <c:choose>
-            <c:when test="${sessionScope.user != null}">
-                <li><a href="vote">Voter</a></li>
-                <li><a href="listBallots">Votre vote</a></li>
+            <c:when test="${requestScope.login != null}">
+                <li><a href="../election/vote">Voter</a></li>
+                <li><a href="../election/votes/byUser/${requestScope.login}">Votre vote</a></li>
             </c:when>
             <c:otherwise>
                 <li><a href="../index.html">Se connecter</a></li>
             </c:otherwise>
         </c:choose>
-        <li><a href="resultats">Résultats</a></li>
-        <c:if test="${sessionScope.user != null}">
-            <li><a href="user">Votre profil</a></li>
-            <li><a href="deco">Déconnexion</a></li>
+        <li><a href="../election/resultats">Résultats</a></li>
+        <c:if test="${requestScope.login != null}">
+            <li><a href="../users/${requestScope.login}">Votre profil</a></li>
+            <li><a href="../users/logout">Déconnexion</a></li>
         </c:if>
     </ul>
 </aside>

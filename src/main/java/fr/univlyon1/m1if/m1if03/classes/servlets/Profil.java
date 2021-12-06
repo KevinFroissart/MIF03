@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import fr.univlyon1.m1if.m1if03.classes.model.User;
 
-@WebServlet(name = "Profil", value = "/profil")
+@WebServlet(name = "Profil", value = {})
 public class Profil extends HttpServlet {
 
 	@Override
