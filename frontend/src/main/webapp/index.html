@@ -1,15 +1,127 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		 <meta charset="UTF-8">
-		<title>Test AJAX</title>
-		<script src="js/ajax.js"></script>
-		<script src="js/exp.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-	</head>
-	<body onload="loadXMLAsynchroneously('GET', 'http://localhost:8080/time.jsp', null, 'timeDiv')">
-		<h1>Test AJAX</h1>
-		<div id="timeDiv">Affichez l'heure ici...</div>
-	</body>
+<!doctype html>
+<html lang="fr">
+<head>
+	<title>&Eacute;lection M1IF03</title>
+	<script
+			src="https://code.jquery.com/jquery-3.6.0.min.js"
+			integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<link href="styles.scss" rel="stylesheet">
+	<meta charset="UTF-8">
+</head>
+<body>
+<h1>&Eacute;lection M1IF03</h1>
+<div id="errMsg"></div>
+<aside>
+	<h2>Menu</h2>
+	<ul>
+		<li><a href='#index'>Accueil</a></li>
+		<li><a href='#connect'>Connexion</a></li>
+		<li><a href='#monCompte'>Mon compte</a></li>
+		<li><a href='#candidats'>Candidats</a></li>
+		<li><a href='#vote'>Voter</a></li>
+		<li><a href='#ballot'>Vérifier mon vote</a></li>
+		<li><a href='#deco'>Déconnexion</a></li>
+	</ul>
+</aside>
+<section id='index' class='active'>
+	<h2>Bienvenue sur l'application Web de la grande élection de 2022 !</h2>
+	<p>Résultats courants de l'élection :</p>
+	<ul>
+		<li>...</li>
+	</ul>
+	<!--
+		A vous de modifier cette section pour qu'elle affiche les résultats en cours et qu'elle se recharge toutes les 5 secondes.
+	-->
+</section>
 
+<section id='connect' class='inactive'>
+	<h2>Connectez-vous pour pouvoir voter</h2>
+	<form method="post" action="TODO">
+		<p>
+			<label for="loginForm">Entrez votre login :</label>
+			<input type="text" name="loginForm" id="loginForm" autofocus>
+		</p>
+		<p>
+			<label for="nomForm">Entrez votre nom :</label>
+			<input type="text" name="nomForm" id="nomForm">
+		</p>
+		<p>
+			<label for="adminForm">Êtes-vous administrateur ?</label>
+			<input type="checkbox" name="adminForm" id="adminForm">
+		</p>
+		<p>
+			<input type="submit" name="action" value="Connexion">
+		</p>
+	</form>
+</section>
+<section id='monCompte' class='inactive'>
+	<h2>Mon compte</h2>
+	<ul id='compteList'>
+		<li>Login : <span id="login"></span></li>
+		<li>Nom : <span id="nom"></span></li>
+		<li>Admin : <span id="admin"></span></li>
+	</ul>
+	<form method="post" action="TODO">
+		<p>Modifier mon nom :
+			<input type="text" name="nom">
+			<input type="submit" value="Modifier">
+		</p>
+	</form>
+	<p><a href='#deco'>Déconnexion</a></p>
+</section>
+<section id='deco' class='inactive'>
+	<h2>Déconnexion</h2>
+	<form method="post" action="Deco">
+		<p>Cliquez ici pour vous déconnecter :
+			<input type="submit" value="Deconnexion">
+		</p>
+	</form>
+	<p><a href='#index'>Retour à la page d'accueil</a></p>
+</section>
+
+<section id='candidats' class='inactive'>
+	<h2>Voici la liste des différents candidats</h2>
+	<ul>
+		<li><a href="#candidat/Toto">Toto</a></li>
+	</ul>
+	<!--
+		TODO: générer dynamiquement cette section pour qu'elle affiche les bonnes données.
+	-->
+</section>
+<section id='candidat' class='inactive'>
+	<h2>Informations sur un candidat</h2>
+	<p>Nom complet : ... ...</p>
+
+	<p><a href="#deco">Déconnexion</a></p>
+</section>
+
+<section id='vote' class='inactive'>
+	<h2>Voter !</h2>
+	<form method="post" action="TODO">
+		<p>
+			<label for="candidat-select">Sélectionnez un candidat :</label>
+			<select name="candidat" id="candidat-select">
+				<option value="">...</option>
+			</select>
+		</p>
+		<p>
+			<input type="submit" name="action" value="Envoyer votre vote">
+		</p>
+	</form>
+	<p><a href="#deco">Déconnexion</a></p>
+</section>
+<section id='ballot' class='inactive'>
+	<h2>Ma preuve de vote</h2>
+	<p>Votre vote a bien été enrgistré.</p>
+	<form method="post" action="TODO">
+		<p><input type="submit" name="action" value="Supprimer votre vote"></p>
+	</form>
+	<!--
+		TODO : vérifier le ballot avant d'afficher ce contenu et le remplacer par un autre message si l'utilisateur n'a pas voté.
+	-->
+	<p><a href='#deco'>Déconnexion</a></p>
+</section>
+</body>
 </html>
