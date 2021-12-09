@@ -6,22 +6,18 @@ window.onload = function () {
     sideBar = document.getElementById('side-bar');
 
     $('#navigation li a').on('click', function () {
-        $($(this).attr('href')).addClass('active').siblings().removeClass('active');
+        let href = $(this).attr('href');
+        $(href).addClass('active').siblings().removeClass('active');
+        // $(this).parent().addClass('active').siblings().removeClass('active');
     });
 }
 
 function show() {
+    console.log("tdest");
     if (isDisplayed) {
         sideBar.classList.remove('active');
     } else {
         sideBar.classList.toggle('active');
     }
     isDisplayed = !isDisplayed;
-}
-
-function traiteXML(XMLDoc, id) {
-    console.log(XMLDoc.documentElement.textContent);
-    console.log(XMLDoc.getElementsByTagName("h")[0].childNodes[0].nodeValue);
-    document.getElementById(id).innerHTML = XMLDoc.documentElement.t;
-    document.getElementById(id).innerHTML = XMLDoc.documentElement.textContent;
 }

@@ -1,127 +1,184 @@
 <!doctype html>
 <html lang="fr">
 <head>
-	<title>&Eacute;lection M1IF03</title>
-	<script
-			src="https://code.jquery.com/jquery-3.6.0.min.js"
-			integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-			crossorigin="anonymous"></script>
-	<script src="js/scripts.js"></script>
-	<link href="styles.scss" rel="stylesheet">
-	<meta charset="UTF-8">
+    <title>&Eacute;lection M1IF03</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script src="js/scripts.js"></script>
+    <meta charset="UTF-8">
 </head>
 <body>
-<h1>&Eacute;lection M1IF03</h1>
+
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" id="toggle-btn" href="#">Menu</a>
+    <span class="navbar-brand">&Eacute;lection M1IF03</span>
+</nav>
+
 <div id="errMsg"></div>
-<aside>
-	<h2>Menu</h2>
-	<ul>
-		<li><a href='#index'>Accueil</a></li>
-		<li><a href='#connect'>Connexion</a></li>
-		<li><a href='#monCompte'>Mon compte</a></li>
-		<li><a href='#candidats'>Candidats</a></li>
-		<li><a href='#vote'>Voter</a></li>
-		<li><a href='#ballot'>Vérifier mon vote</a></li>
-		<li><a href='#deco'>Déconnexion</a></li>
-	</ul>
-</aside>
-<section id='index' class='active'>
-	<h2>Bienvenue sur l'application Web de la grande élection de 2022 !</h2>
-	<p>Résultats courants de l'élection :</p>
-	<ul>
-		<li>...</li>
-	</ul>
-	<!--
-		A vous de modifier cette section pour qu'elle affiche les résultats en cours et qu'elle se recharge toutes les 5 secondes.
-	-->
-</section>
 
-<section id='connect' class='inactive'>
-	<h2>Connectez-vous pour pouvoir voter</h2>
-	<form method="post" action="TODO">
-		<p>
-			<label for="loginForm">Entrez votre login :</label>
-			<input type="text" name="loginForm" id="loginForm" autofocus>
-		</p>
-		<p>
-			<label for="nomForm">Entrez votre nom :</label>
-			<input type="text" name="nomForm" id="nomForm">
-		</p>
-		<p>
-			<label for="adminForm">Êtes-vous administrateur ?</label>
-			<input type="checkbox" name="adminForm" id="adminForm">
-		</p>
-		<p>
-			<input type="submit" name="action" value="Connexion">
-		</p>
-	</form>
-</section>
-<section id='monCompte' class='inactive'>
-	<h2>Mon compte</h2>
-	<ul id='compteList'>
-		<li>Login : <span id="login"></span></li>
-		<li>Nom : <span id="nom"></span></li>
-		<li>Admin : <span id="admin"></span></li>
-	</ul>
-	<form method="post" action="TODO">
-		<p>Modifier mon nom :
-			<input type="text" name="nom">
-			<input type="submit" value="Modifier">
-		</p>
-	</form>
-	<p><a href='#deco'>Déconnexion</a></p>
-</section>
-<section id='deco' class='inactive'>
-	<h2>Déconnexion</h2>
-	<form method="post" action="Deco">
-		<p>Cliquez ici pour vous déconnecter :
-			<input type="submit" value="Deconnexion">
-		</p>
-	</form>
-	<p><a href='#index'>Retour à la page d'accueil</a></p>
-</section>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div id="side-bar" class="sidebar-sticky active">
+                <ul id="navigation" class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#index">
+                            <span data-feather="home"></span>
+                            Accueil <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#connect">
+                            <span data-feather="file"></span>
+                            Connexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#monCompte">
+                            <span data-feather="shopping-cart"></span>
+                            Mon compte
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#candidats">
+                            <span data-feather="users"></span>
+                            Candidats
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#vote">
+                            <span data-feather="bar-chart-2"></span>
+                            Voter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ballot">
+                            <span data-feather="layers"></span>
+                            Vérifier mon vote
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#deco">
+                            <span data-feather="layers"></span>
+                            Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-<section id='candidats' class='inactive'>
-	<h2>Voici la liste des différents candidats</h2>
-	<ul>
-		<li><a href="#candidat/Toto">Toto</a></li>
-	</ul>
-	<!--
-		TODO: générer dynamiquement cette section pour qu'elle affiche les bonnes données.
-	-->
-</section>
-<section id='candidat' class='inactive'>
-	<h2>Informations sur un candidat</h2>
-	<p>Nom complet : ... ...</p>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <section id='index' class='active'>
+                    <h2>Bienvenue sur l'application Web de la grande élection de 2022 !</h2>
+                    <p>Résultats courants de l'élection :</p>
+                    <ul>
+                        <li>...</li>
+                    </ul>
+                    <!--
+                        A vous de modifier cette section pour qu'elle affiche les résultats en cours et qu'elle se recharge toutes les 5 secondes.
+                    -->
+                </section>
 
-	<p><a href="#deco">Déconnexion</a></p>
-</section>
+                <section id='connect'>
+                    <h2>Connectez-vous pour pouvoir voter</h2>
+                    <form method="post" action="TODO">
+                        <p>
+                            <label for="loginForm">Entrez votre login :</label>
+                            <input type="text" name="loginForm" id="loginForm" autofocus>
+                        </p>
+                        <p>
+                            <label for="nomForm">Entrez votre nom :</label>
+                            <input type="text" name="nomForm" id="nomForm">
+                        </p>
+                        <p>
+                            <label for="adminForm">Êtes-vous administrateur ?</label>
+                            <input type="checkbox" name="adminForm" id="adminForm">
+                        </p>
+                        <p>
+                            <input type="submit" name="action" value="Connexion">
+                        </p>
+                    </form>
+                </section>
+                <section id='monCompte'>
+                    <h2>Mon compte</h2>
+                    <ul id='compteList'>
+                        <li>Login : <span id="login"></span></li>
+                        <li>Nom : <span id="nom"></span></li>
+                        <li>Admin : <span id="admin"></span></li>
+                    </ul>
+                    <form method="post" action="TODO">
+                        <p>Modifier mon nom :
+                            <input type="text" name="nom">
+                            <input type="submit" value="Modifier">
+                        </p>
+                    </form>
+                    <p><a href='#deco'>Déconnexion</a></p>
+                </section>
+                <section id='deco'>
+                    <h2>Déconnexion</h2>
+                    <form method="post" action="Deco">
+                        <p>Cliquez ici pour vous déconnecter :
+                            <input type="submit" value="Deconnexion">
+                        </p>
+                    </form>
+                    <p><a href='#index'>Retour à la page d'accueil</a></p>
+                </section>
 
-<section id='vote' class='inactive'>
-	<h2>Voter !</h2>
-	<form method="post" action="TODO">
-		<p>
-			<label for="candidat-select">Sélectionnez un candidat :</label>
-			<select name="candidat" id="candidat-select">
-				<option value="">...</option>
-			</select>
-		</p>
-		<p>
-			<input type="submit" name="action" value="Envoyer votre vote">
-		</p>
-	</form>
-	<p><a href="#deco">Déconnexion</a></p>
-</section>
-<section id='ballot' class='inactive'>
-	<h2>Ma preuve de vote</h2>
-	<p>Votre vote a bien été enrgistré.</p>
-	<form method="post" action="TODO">
-		<p><input type="submit" name="action" value="Supprimer votre vote"></p>
-	</form>
-	<!--
-		TODO : vérifier le ballot avant d'afficher ce contenu et le remplacer par un autre message si l'utilisateur n'a pas voté.
-	-->
-	<p><a href='#deco'>Déconnexion</a></p>
-</section>
+                <section id='candidats'>
+                    <h2>Voici la liste des différents candidats</h2>
+                    <ul>
+                        <li><a href="#candidat/Toto">Toto</a></li>
+                    </ul>
+                    <!--
+                        TODO: générer dynamiquement cette section pour qu'elle affiche les bonnes données.
+                    -->
+                </section>
+                <section id='candidat'>
+                    <h2>Informations sur un candidat</h2>
+                    <p>Nom complet : ... ...</p>
+
+                    <p><a href="#deco">Déconnexion</a></p>
+                </section>
+                <section id='vote'>
+                    <h2>Voter !</h2>
+                    <form method="post" action="TODO">
+                        <p>
+                            <label for="candidat-select">Sélectionnez un candidat :</label>
+                            <select name="candidat" id="candidat-select">
+                                <option value="">...</option>
+                            </select>
+                        </p>
+                        <p>
+                            <input type="submit" name="action" value="Envoyer votre vote">
+                        </p>
+                    </form>
+                    <p><a href="#deco">Déconnexion</a></p>
+                </section>
+                <section id='ballot'>
+                    <h2>Ma preuve de vote</h2>
+                    <p>Votre vote a bien été enrgistré.</p>
+                    <form method="post" action="TODO">
+                        <p><input type="submit" name="action" value="Supprimer votre vote"></p>
+                    </form>
+                    <!--
+                        TODO : vérifier le ballot avant d'afficher ce contenu et le remplacer par un autre message si l'utilisateur n'a pas voté.
+                    -->
+                    <p><a href='#deco'>Déconnexion</a></p>
+                </section>
+            </div>
+        </main>
+
+    </div>
+</div>
 </body>
 </html>
