@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.js"
+            integrity="sha512-SDpqS2G7Z70bGQSl26nhAdQj9YJoQqMOJVBVqE1EyEaAAzdvLFNZ0R06FzBu+E8xTcmbd2dBhvBJuJrbEUiKqA=="
+            crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
     <meta charset="UTF-8">
 </head>
@@ -84,6 +87,13 @@
                     <ul>
                         <li>...</li>
                     </ul>
+                    <script id="index-template" type="x-tmpl-mustache">
+                        {{#.}}
+                            <li>{{nomCandidat}} : {{votes}} vote(s)</li>
+                        {{/.}}
+
+
+                    </script>
                     <!--
                         A vous de modifier cette section pour qu'elle affiche les résultats en cours et qu'elle se recharge toutes les 5 secondes.
                     -->
@@ -91,7 +101,7 @@
 
                 <section id='connect'>
                     <h2>Connectez-vous pour pouvoir voter</h2>
-                    <form method="post" action="TODO">
+                    <form id="login-form" method="post">
                         <p>
                             <label for="loginForm">Entrez votre login :</label>
                             <input type="text" name="loginForm" id="loginForm" autofocus>
@@ -109,6 +119,7 @@
                         </p>
                     </form>
                 </section>
+
                 <section id='monCompte'>
                     <h2>Mon compte</h2>
                     <ul id='compteList'>
@@ -124,14 +135,15 @@
                     </form>
                     <p><a href='#deco'>Déconnexion</a></p>
                 </section>
+
                 <section id='deco'>
                     <h2>Déconnexion</h2>
-                    <form method="post" action="Deco">
+                    <form method="post" onsubmit="return validation()" action="">
                         <p>Cliquez ici pour vous déconnecter :
                             <input type="submit" value="Deconnexion">
                         </p>
                     </form>
-                    <p><a href='#index'>Retour à la page d'accueil</a></p>
+                    <p><a href='#index' onclick="showSection()">Retour à la page d'accueil</a></p>
                 </section>
 
                 <section id='candidats'>
@@ -139,16 +151,22 @@
                     <ul>
                         <li><a href="#candidat/Toto">Toto</a></li>
                     </ul>
-                    <!--
-                        TODO: générer dynamiquement cette section pour qu'elle affiche les bonnes données.
-                    -->
+                    <script id="candidats-template" type="x-tmpl-mustache">
+                        {{#.}}
+                            <li><a href="#candidat/{{nom}}">{{nom}}</a></li>
+                        {{/.}}
+
+
+                    </script>
                 </section>
+
                 <section id='candidat'>
                     <h2>Informations sur un candidat</h2>
                     <p>Nom complet : ... ...</p>
 
                     <p><a href="#deco">Déconnexion</a></p>
                 </section>
+
                 <section id='vote'>
                     <h2>Voter !</h2>
                     <form method="post" action="TODO">
@@ -181,4 +199,11 @@
     </div>
 </div>
 </body>
-</html>
+
+<script id="monCompte-template" type="x-tmpl-mustache">
+            <li>Login : <span id="login">{{login}}</span></li>
+            <li>Nom : <span id="nom">{{nom}}</span></li>
+            <li>Admin : <span id="admin">{{admin}}</span></li>
+
+
+</script>
