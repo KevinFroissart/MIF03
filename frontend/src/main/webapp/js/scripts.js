@@ -26,11 +26,11 @@ function buildIndex() {
         dataType: "json",
     })
         .done((res, textStatus, request) => {
-            buildTemplate(`#index-template`, res, '#index');
+            buildTemplate(`#index-template`, res, '#index', 'ul');
         });
 }
 
-function getCandidats(hash) {
+function getCandidats(hash, type) {
     $.ajax({
         type: "GET",
         url: URL + `/election/candidats`,
@@ -43,8 +43,8 @@ function getCandidats(hash) {
                     nom: data[i].replace('election/candidats/', '')
                 };
                 candidats.push(candidat);
-                buildTemplate(`${hash}-template`, candidats, hash);
             }
+            buildTemplate(`${hash}-template`, candidats, hash, type);
         });
 }
 
@@ -52,7 +52,6 @@ setTimeout("buildIndex();", 5000);
 
 let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template"];
 window.addEventListener('hashchange', () => {
-    console.log("la")
     let hash = window.location.hash;
     let target = hash.replace('#', '').toString();
     if (templates.indexOf(`${hash}-template`) >= 0) {
@@ -69,11 +68,10 @@ window.addEventListener('hashchange', () => {
                 .done((res, textStatus, request) => {
                     buildTemplate(`${hash}-template`, res, hash);
                 });
-
         } else if (target === "candidats") {
-            getCandidats(hash);
+            getCandidats(hash, 'ul');
         } else if (target === "vote") {
-            getCandidats(hash);
+            getCandidats(hash, 'select');
         }
     }
     console.log("hash : " + hash);
@@ -134,21 +132,19 @@ $('#deco').on('submit', function (e) {
         });
 });
 
-function buildTemplate(script, data, elt) {
+function buildTemplate(script, data, elt, type) {
     let template = $(script).html();
     Mustache.parse(template);
     let rendered = Mustache.render(template, data);
-    $(`${elt} ul`).html(rendered);
+    $(`${elt} ${type}`).html(rendered);
 }
 
 function show(hash) {
-    console.log("display");
     $(hash)
         .addClass('active').siblings().removeClass('active');
 }
 
 function validation() {
-    console.log("test");
     return false;
 }
 
