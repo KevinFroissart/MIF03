@@ -11,28 +11,53 @@ window.onload = function () {
     $('#navigation li a').on('click', function () {
         $($(this).attr('href')).addClass('active').siblings().removeClass('active');
     });
+
+    buildIndex();
 }
 
 function showSection() {
     $($(this).attr('href')).addClass('active').siblings().removeClass('active');
 }
 
+function buildIndex() {
+    $.ajax({
+        type: "GET",
+        url: URL + `/election/resultats`,
+        dataType: "json",
+    })
+        .done((res, textStatus, request) => {
+            buildTemplate(`#index-template`, res, '#index');
+        });
+}
 
-let templates = ["#index-template", "#monCompte-template", "#candidats-template"];
+function getCandidats(hash) {
+    $.ajax({
+        type: "GET",
+        url: URL + `/election/candidats`,
+        dataType: "json",
+    })
+        .done((data) => {
+            let candidats = [];
+            for (let i = 0; i < data.length; i++) {
+                candidat = {
+                    nom: data[i].replace('election/candidats/', '')
+                };
+                candidats.push(candidat);
+                buildTemplate(`${hash}-template`, candidats, hash);
+            }
+        });
+}
+
+setTimeout("buildIndex();", 5000);
+
+let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template"];
 window.addEventListener('hashchange', () => {
     console.log("la")
     let hash = window.location.hash;
     let target = hash.replace('#', '').toString();
     if (templates.indexOf(`${hash}-template`) >= 0) {
         if (target === "index") {
-            $.ajax({
-                type: "GET",
-                url: URL + `/election/resultats`,
-                dataType: "json",
-            })
-                .done((res, textStatus, request) => {
-                    buildTemplate(`${hash}-template`, res, hash);
-                });
+            buildIndex();
         } else if (target === "monCompte") {
             console.log("monCompte")
             $.ajax({
@@ -46,21 +71,9 @@ window.addEventListener('hashchange', () => {
                 });
 
         } else if (target === "candidats") {
-            $.ajax({
-                type: "GET",
-                url: URL + `/election/candidats`,
-                dataType: "json",
-            })
-                .done((data) => {
-                    let candidats = [];
-                    for (let i = 0; i < data.length; i++) {
-                        let candidat = {
-                            nom: data[i].replace('election/candidats/', '')
-                        };
-                        candidats.push(candidat);
-                    }
-                    buildTemplate(`${hash}-template`, candidats, hash);
-                });
+            getCandidats(hash);
+        } else if (target === "vote") {
+            getCandidats(hash);
         }
     }
     console.log("hash : " + hash);
@@ -138,3 +151,5 @@ function validation() {
     console.log("test");
     return false;
 }
+
+$('input').attr("contentEditable", "true");
