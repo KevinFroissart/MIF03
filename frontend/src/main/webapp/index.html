@@ -93,6 +93,11 @@
                         {{/.}}
 
 
+
+
+
+
+
                     </script>
                     <!--
                         A vous de modifier cette section pour qu'elle affiche les résultats en cours et qu'elle se recharge toutes les 5 secondes.
@@ -115,7 +120,7 @@
                             <input type="checkbox" name="adminForm" id="adminForm">
                         </p>
                         <p>
-                            <input type="submit" name="action" value="Connexion">
+                            <input type="submit" name="action" value="Connexion" onsubmit="return validation()">
                         </p>
                     </form>
                 </section>
@@ -157,6 +162,11 @@
                         {{/.}}
 
 
+
+
+
+
+
                     </script>
                 </section>
 
@@ -181,6 +191,14 @@
                         </p>
                     </form>
                     <p><a href="#deco">Déconnexion</a></p>
+                    <script id="vote-template" type="x-tmpl-mustache">
+                                    <select name="candidat" id="candidat-select">
+                                    {{#.}}
+                                        <option value="{{nom}}">{{nom}}</option>
+                                    {{/.}}
+                                    </select>
+
+                    </script>
                 </section>
                 <section id='ballot'>
                     <h2>Ma preuve de vote</h2>
@@ -204,6 +222,11 @@
             <li>Login : <span id="login">{{login}}</span></li>
             <li>Nom : <span id="nom">{{nom}}</span></li>
             <li>Admin : <span id="admin">{{admin}}</span></li>
+
+
+
+
+
 
 
 </script>
