@@ -42,9 +42,16 @@ function getCandidats(hash, type) {
         .done((data) => {
             let candidats = [];
             for (let i = 0; i < data.length; i++) {
-                candidat = {
-                    nom: data[i].replace('election/candidats/', '')
-                };
+                if (login != null) {
+                    candidat = {
+                        connecte: true,
+                        nom: data[i].replace('election/candidats/', '')
+                    };
+                } else {
+                    candidat = {
+                        nom: data[i].replace('election/candidats/', '')
+                    };
+                }
                 candidats.push(candidat);
             }
             buildTemplate(`${hash}-template`, candidats, hash, type);
@@ -53,11 +60,11 @@ function getCandidats(hash, type) {
 
 setTimeout("buildIndex();", 5000);
 
-let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template", "#ballot-template"];
+let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template", "#ballot-template", "#candidat-connecte-template"];
 window.addEventListener('hashchange', () => {
     let hash = window.location.hash;
     let target = hash.replace('#', '').toString();
-    if (templates.indexOf(`${hash}-template`) >= 0) {
+    if (templates.indexOf(`${hash}-template`) >= 0 || hash.includes("candidats/")) {
         if (target === "index") {
             buildIndex();
         } else if (target === "monCompte") {
@@ -88,6 +95,20 @@ window.addEventListener('hashchange', () => {
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     document.getElementById("supp-vote-input").disabled = true;
                     $("#preuve-vote").html("Vous n'avez pas encore voté.");
+                }
+            })
+        } else { // candidat
+            hash = "#candidat";
+            $.ajax({
+                type: "GET",
+                url: URL + `/election/` + target,
+                headers: {"Authorization": `${token}`, "Accept": "application/json"},
+                dataType: "json",
+                success: function (res) {
+                    buildTemplate(`${hash}-template`, res, hash, 'p');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Une erreur est survenue: " + textStatus);
                 }
             })
         }
@@ -210,4 +231,4 @@ function validation() {
     return false;
 }
 
-//$('input').attr("contentEditable", "true");
+//$('input').attr("contentEditable", "true"); on retire pour pouvoir disable des boutons.

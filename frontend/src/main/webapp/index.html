@@ -151,11 +151,16 @@
                 <section id='candidats'>
                     <h2>Voici la liste des différents candidats</h2>
                     <ul>
-                        <li><a href="#candidat/Toto">Toto</a></li>
+                        <li><a href="#candidats/Toto">Toto</a></li>
                     </ul>
                     <script id="candidats-template" type="x-tmpl-mustache">
                         {{#.}}
-                            <li><a href="#candidat/{{nom}}">{{nom}}</a></li>
+                        {{#connecte}}
+                            <li><a href="#candidats/{{nom}}">{{nom}}</a></li>
+                        {{/connecte}}
+                        {{^connecte}}
+                            <li>{{nom}}</li>
+                        {{/connecte}}
                         {{/.}}
 
                     </script>
@@ -163,7 +168,10 @@
 
                 <section id='candidat'>
                     <h2>Informations sur un candidat</h2>
-                    <p>Nom complet : ... ...</p>
+                    <script id="candidat-template" type="x-tmpl-mustache">
+                        Nom complet : {{prenom}} {{nom}}
+
+                    </script>
 
                     <p><a href="#deco">Déconnexion</a></p>
                 </section>
