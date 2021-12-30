@@ -1,4 +1,4 @@
-let URL = "https://192.168.75.56/api/v3";
+const URL = "https://192.168.75.56/api/v3";
 let token;
 let tkn;
 let login;
@@ -81,10 +81,10 @@ window.addEventListener('hashchange', () => {
 /**
  * Connexion
  */
-let loginForm = document.forms.namedItem("login-form");
-$('#login-form').submit(function (e) {
-    console.log("ICICIICICICICICICIOICICICICICIC")
+$('#login-form').on('submit', function (e) {
     e.preventDefault();
+    console.log("hellooo1");
+    let loginForm = document.forms.namedItem("login-form");
     let formData = new FormData(loginForm);
     console.log(loginForm)
     formData.append('login', '')
@@ -92,23 +92,23 @@ $('#login-form').submit(function (e) {
     formData.append('admin', false);
     let data = JSON.stringify(Object.fromEntries(formData));
     console.log(data)
+    document.getElementById('login-form').innerText = "test";
+    $.ajax({
+         type: "POST",
+         url: URL + "/users/login",
+         contentType: "application/json",
+         data: data,
+         headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
+         dataType: "json",
 
-    // $.ajax({
-    //     type: "POST",
-    //     url: URL + "/users/login",
-    //     contentType: "application/json",
-    //     data: data,
-    //     headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
-    //     dataType: "json",
-    //
-    // })
-    //     .done((data, textStatus, request) => {
-    //         tkn = request.getResponseHeader("authorization");
-    //         token = tkn.replace("Bearer ", "");
-    //         login = $("#user-login").val();
-    //         // window.location.assign(window.location.origin + "/#monCompte");
-    //         // $("#login-form").hide();
-    //     });
+     })
+         .done((data, textStatus, request) => {
+             tkn = request.getResponseHeader("authorization");
+             token = tkn.replace("Bearer ", "");
+             login = $("#user-login").val();
+             window.location.assign(window.location.origin + "/#monCompte");
+             $("#login-form").hide();
+         });
 });
 
 /**
@@ -145,6 +145,7 @@ function show(hash) {
 }
 
 function validation() {
+    console.log("hellooo");
     return false;
 }
 
