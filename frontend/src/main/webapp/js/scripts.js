@@ -2,6 +2,7 @@ const URL = "https://192.168.75.56/api/v3";
 let token;
 let tkn;
 let login;
+let ballotId;
 
 window.onload = function () {
     document.getElementById('toggle-btn').addEventListener('click', () => {
@@ -13,6 +14,8 @@ window.onload = function () {
     });
 
     buildIndex();
+    $("#vote-form").hide();
+    $("#vote-div").html("Vous devez être connecté pour voter.");
 }
 
 function showSection() {
@@ -50,7 +53,7 @@ function getCandidats(hash, type) {
 
 setTimeout("buildIndex();", 5000);
 
-let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template"];
+let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template", "#ballot-template"];
 window.addEventListener('hashchange', () => {
     let hash = window.location.hash;
     let target = hash.replace('#', '').toString();
@@ -58,7 +61,6 @@ window.addEventListener('hashchange', () => {
         if (target === "index") {
             buildIndex();
         } else if (target === "monCompte") {
-            console.log("monCompte")
             $.ajax({
                 type: "GET",
                 url: URL + `/users/` + login,
@@ -66,13 +68,28 @@ window.addEventListener('hashchange', () => {
                 dataType: "json"
             })
                 .done((res, textStatus, request) => {
-                    console.log(res)
                     buildTemplate(`${hash}-template`, res, hash, 'ul');
                 });
         } else if (target === "candidats") {
             getCandidats(hash, 'ul');
         } else if (target === "vote") {
             getCandidats(hash, 'select');
+        } else if (target == "ballot") {
+            $.ajax({
+                type: "GET",
+                url: URL + `/election/ballots/byUser/` + login,
+                headers: {"Authorization": `${token}`, "Accept": "application/json"},
+                dataType: "json",
+                success: function (res) {
+                    ballotId = res.id;
+                    document.getElementById("supp-vote-input").disabled = false;
+                    $("#preuve-vote").html("Votre vote a bien été enregistré.");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    document.getElementById("supp-vote-input").disabled = true;
+                    $("#preuve-vote").html("Vous n'avez pas encore voté.");
+                }
+            })
         }
     }
     console.log("hash : " + hash);
@@ -82,7 +99,7 @@ window.addEventListener('hashchange', () => {
 /**
  * Connexion
  */
-let loginForm;
+let loginForm = document.forms.namedItem("login-form");
 $('#login-form').on('submit', function (e) {
     e.preventDefault();
     loginForm = document.forms.namedItem("login-form");
@@ -94,7 +111,7 @@ $('#login-form').on('submit', function (e) {
         url: URL + "/users/login",
         contentType: "application/json",
         data: data,
-        headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
+        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
         dataType: "json"
     })
         .done((data, textStatus, request) => {
@@ -103,6 +120,52 @@ $('#login-form').on('submit', function (e) {
             login = formData.get('login');
             window.location.assign(window.location.origin + "/#monCompte");
             $("#login-form").hide();
+            $("#login-div").html("Vous êtes déjà connecté.");
+            $("#vote-div").html("");
+            $("#vote-form").show();
+        });
+});
+
+/**
+ * Vote
+ */
+let voteForm = document.forms.namedItem("vote-form");
+$('#vote-form').on('submit', function (e) {
+    e.preventDefault();
+    let formData = new FormData(voteForm);
+    let data = JSON.stringify(Object.fromEntries(formData));
+    $.ajax({
+        type: "POST",
+        url: URL + "/election/ballots",
+        contentType: "application/json",
+        data: data,
+        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
+        success: function (res) {
+            window.location.assign(window.location.origin + "/#ballot");
+            $("#vote-form").hide();
+            $("#vote-div").html("Vous avez déjà voté");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Une erreur est survenue: " + textStatus);
+        }
+    })
+});
+
+/**
+ * Suppression vote
+ */
+$('#supp-vote').on('submit', function (e) {
+    e.preventDefault();
+    $.ajax({
+        type: "DELETE",
+        url: URL + "/" + ballotId,
+        headers: {"Authorization": `${token}`}
+    })
+        .done(() => {
+            ballotId = null;
+            window.location.assign(window.location.origin + "/#vote");
+            $("#vote-div").html("");
+            $("#vote-form").show();
         });
 });
 
@@ -123,7 +186,10 @@ $('#deco').on('submit', function (e) {
             login = null;
             token = null;
             tkn = null
+            $("#login-div").html("");
             $("#login-form").show();
+            $("#vote-form").hide();
+            $("#vote-div").html("Vous devez être connecté pour voter.");
         });
 });
 
@@ -144,4 +210,4 @@ function validation() {
     return false;
 }
 
-$('input').attr("contentEditable", "true");
+//$('input').attr("contentEditable", "true");

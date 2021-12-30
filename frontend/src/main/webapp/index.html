@@ -95,6 +95,8 @@
 
                 <section id='connect'>
                     <h2>Connectez-vous pour pouvoir voter</h2>
+                    <div id="login-div">
+                    </div>
                     <form id="login-form" method="post">
                         <p>
                             <label for="login">Entrez votre login :</label>
@@ -168,10 +170,12 @@
 
                 <section id='vote'>
                     <h2>Voter !</h2>
-                    <form method="post" action="TODO">
+                    <div id="vote-div">
+                    </div>
+                    <form id="vote-form" method="post">
                         <p>
                             <label for="candidat-select">Sélectionnez un candidat :</label>
-                            <select name="candidat" id="candidat-select">
+                            <select name="nomCandidat" id="candidat-select">
                                 <option value="">...</option>
                             </select>
                         </p>
@@ -181,7 +185,7 @@
                     </form>
                     <p><a href="#deco">Déconnexion</a></p>
                     <script id="vote-template" type="x-tmpl-mustache">
-                                    <select name="candidat" id="candidat-select">
+                                    <select name="nomCandidat" id="candidat-select">
                                     {{#.}}
                                         <option value="{{nom}}">{{nom}}</option>
                                     {{/.}}
@@ -189,15 +193,15 @@
 
                     </script>
                 </section>
+
                 <section id='ballot'>
                     <h2>Ma preuve de vote</h2>
-                    <p>Votre vote a bien été enrgistré.</p>
-                    <form method="post" action="TODO">
-                        <p><input type="submit" name="action" value="Supprimer votre vote"></p>
+                    <div id="preuve-vote">
+                        <p>Vous n'avez pas encore voté.</p>
+                    </div>
+                    <form id="supp-vote" method="post">
+                        <p><input type="submit" id="supp-vote-input" value="Supprimer votre vote" disabled></p>
                     </form>
-                    <!--
-                        TODO : vérifier le ballot avant d'afficher ce contenu et le remplacer par un autre message si l'utilisateur n'a pas voté.
-                    -->
                     <p><a href='#deco'>Déconnexion</a></p>
                 </section>
             </div>
