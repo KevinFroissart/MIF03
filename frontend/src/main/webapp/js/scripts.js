@@ -13,6 +13,8 @@ window.onload = function () {
         $($(this).attr('href')).addClass('active').siblings().removeClass('active');
     });
 
+    hideConnectSections();
+
     buildIndex();
     $("#vote-form").hide();
     $("#vote-div").html("Vous devez être connecté pour voter.");
@@ -20,6 +22,20 @@ window.onload = function () {
 
 function showSection() {
     $($(this).attr('href')).addClass('active').siblings().removeClass('active');
+}
+
+function hideConnectSections() {
+    $('a[href$="monCompte"]').hide();
+    $('a[href$="vote"]').hide();
+    $('a[href$="ballot"]').hide();
+    $('a[href$="deco"]').hide();
+}
+
+function showConnectSections() {
+    $('a[href$="monCompte"]').show();
+    $('a[href$="vote"]').show();
+    $('a[href$="ballot"]').show();
+    $('a[href$="deco"]').show();
 }
 
 function buildIndex() {
@@ -144,6 +160,7 @@ $('#login-form').on('submit', function (e) {
             $("#login-div").html("Vous êtes déjà connecté.");
             $("#vote-div").html("");
             $("#vote-form").show();
+            showConnectSections();
         });
 });
 
@@ -211,6 +228,7 @@ $('#deco').on('submit', function (e) {
             $("#login-form").show();
             $("#vote-form").hide();
             $("#vote-div").html("Vous devez être connecté pour voter.");
+            hideConnectSections();
         });
 });
 
