@@ -97,16 +97,16 @@
                     <h2>Connectez-vous pour pouvoir voter</h2>
                     <form id="login-form" method="post">
                         <p>
-                            <label for="loginForm">Entrez votre login :</label>
-                            <input type="text" name="loginForm" id="loginForm" autofocus>
+                            <label for="login">Entrez votre login :</label>
+                            <input type="text" name="login" id="loginForm" autofocus>
                         </p>
                         <p>
-                            <label for="nomForm">Entrez votre nom :</label>
-                            <input type="text" name="nomForm" id="nomForm">
+                            <label for="nom">Entrez votre nom :</label>
+                            <input type="text" name="nom" id="nomForm">
                         </p>
                         <p>
-                            <label for="adminForm">Êtes-vous administrateur ?</label>
-                            <input type="checkbox" name="adminForm" id="adminForm">
+                            <label for="admin">Êtes-vous administrateur ?</label>
+                            <input type="checkbox" name="admin" id="adminForm">
                         </p>
                         <p>
                             <input type="submit" name="action" value="Connexion">
@@ -121,6 +121,12 @@
                         <li>Nom : <span id="nom"></span></li>
                         <li>Admin : <span id="admin"></span></li>
                     </ul>
+                    <script id="monCompte-template" type="x-tmpl-mustache">
+                        <li>Login : <span id="login">{{login}}</span></li>
+                        <li>Nom : <span id="nom">{{nom}}</span></li>
+                        <li>Admin : <span id="admin">{{admin}}</span></li>
+
+                    </script>
                     <form method="post" action="TODO">
                         <p>Modifier mon nom :
                             <input type="text" name="nom">
@@ -201,12 +207,7 @@
 </div>
 
 <script src="js/scripts.js"></script>
-<script id="monCompte-template" type="x-tmpl-mustache">
-            <li>Login : <span id="login">{{login}}</span></li>
-            <li>Nom : <span id="nom">{{nom}}</span></li>
-            <li>Admin : <span id="admin">{{admin}}</span></li>
 
-</script>
 
 </body>
 </html>

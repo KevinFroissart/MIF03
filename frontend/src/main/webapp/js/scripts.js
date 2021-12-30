@@ -61,12 +61,13 @@ window.addEventListener('hashchange', () => {
             console.log("monCompte")
             $.ajax({
                 type: "GET",
-                url: URL + `/users`,
-                headers: {"Authorization": `${tkn}`, "Accept": "application/json"},
+                url: URL + `/users/` + login,
+                headers: {"Authorization": `${token}`, "Accept": "application/json"},
                 dataType: "json"
             })
                 .done((res, textStatus, request) => {
-                    buildTemplate(`${hash}-template`, res, hash);
+                    console.log(res)
+                    buildTemplate(`${hash}-template`, res, hash, 'ul');
                 });
         } else if (target === "candidats") {
             getCandidats(hash, 'ul');
@@ -81,34 +82,28 @@ window.addEventListener('hashchange', () => {
 /**
  * Connexion
  */
+let loginForm;
 $('#login-form').on('submit', function (e) {
     e.preventDefault();
-    console.log("hellooo1");
-    let loginForm = document.forms.namedItem("login-form");
+    loginForm = document.forms.namedItem("login-form");
     let formData = new FormData(loginForm);
-    console.log(loginForm)
-    formData.append('login', '')
-    formData.append('nom', '');
-    formData.append('admin', false);
+    formData.append('admin', !!formData.get('admin'));
     let data = JSON.stringify(Object.fromEntries(formData));
-    console.log(data)
-    document.getElementById('login-form').innerText = "test";
     $.ajax({
-         type: "POST",
-         url: URL + "/users/login",
-         contentType: "application/json",
-         data: data,
-         headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
-         dataType: "json",
-
-     })
-         .done((data, textStatus, request) => {
-             tkn = request.getResponseHeader("authorization");
-             token = tkn.replace("Bearer ", "");
-             login = $("#user-login").val();
-             window.location.assign(window.location.origin + "/#monCompte");
-             $("#login-form").hide();
-         });
+        type: "POST",
+        url: URL + "/users/login",
+        contentType: "application/json",
+        data: data,
+        headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
+        dataType: "json"
+    })
+        .done((data, textStatus, request) => {
+            tkn = request.getResponseHeader("authorization");
+            token = tkn.replace("Bearer ", "");
+            login = formData.get('login');
+            window.location.assign(window.location.origin + "/#monCompte");
+            $("#login-form").hide();
+        });
 });
 
 /**
