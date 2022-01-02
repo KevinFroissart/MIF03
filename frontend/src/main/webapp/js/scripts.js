@@ -6,7 +6,6 @@ let ballotId;
 
 window.onload = function () {
     document.getElementById('toggle-btn').addEventListener('click', () => {
-        $('#navigation').slideToggle();
     });
 
     $('#navigation li a').on('click', function () {
@@ -163,6 +162,27 @@ $('#login-form').on('submit', function (e) {
             showConnectSections();
         });
 });
+/**
+ * Mon Compte
+ */
+$('#change-name-form').on('submit', function (e) {
+    e.preventDefault();
+    let changeNameForm = document.forms.namedItem("change-name-form");
+    let formData = new FormData(changeNameForm);
+    let data = JSON.stringify(Object.fromEntries(formData));
+    let nom = document.forms["change-name-form"]["nom"].value;
+    $.ajax({
+        type: "PUT",
+        url: URL + "/users/" + login + "/nom",
+        contentType: "application/json",
+        data: data,
+        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
+        dataType: "json"
+    })
+        .done((data, textStatus, request) => {
+            $('#nom').html(nom);
+        });
+});
 
 /**
  * Vote
@@ -188,7 +208,6 @@ $('#vote-form').on('submit', function (e) {
         }
     })
 });
-
 /**
  * Suppression vote
  */
@@ -245,7 +264,6 @@ function show(hash) {
 }
 
 function validation() {
-    console.log("hellooo");
     return false;
 }
 
