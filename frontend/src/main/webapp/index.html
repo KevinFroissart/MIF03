@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr">
 <head>
+    <link rel="shortcut icon" href="#">
     <title>&Eacute;lection M1IF03</title>
     <script
             src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -15,6 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.js"
             integrity="sha512-SDpqS2G7Z70bGQSl26nhAdQj9YJoQqMOJVBVqE1EyEaAAzdvLFNZ0R06FzBu+E8xTcmbd2dBhvBJuJrbEUiKqA=="
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <meta charset="UTF-8">
 </head>
 <body>
@@ -100,18 +102,18 @@
                     <form id="login-form" method="post">
                         <p>
                             <label for="login">Entrez votre login :</label>
-                            <input type="text" name="login" id="loginForm" autofocus>
+                            <input type="text" name="login" id="loginInput" autofocus>
                         </p>
                         <p>
                             <label for="nom">Entrez votre nom :</label>
-                            <input type="text" name="nom" id="nomForm">
+                            <input type="text" name="nom" id="nomInput">
                         </p>
                         <p>
                             <label for="admin">Êtes-vous administrateur ?</label>
-                            <input type="checkbox" name="admin" id="adminForm">
+                            <input type="checkbox" name="admin">
                         </p>
                         <p>
-                            <input type="submit" name="action" value="Connexion">
+                            <input type="submit" value="Connexion">
                         </p>
                     </form>
                 </section>
@@ -140,7 +142,7 @@
 
                 <section id='deco'>
                     <h2>Déconnexion</h2>
-                    <form method="post" onsubmit="return validation()" action="">
+                    <form method="post">
                         <p>Cliquez ici pour vous déconnecter :
                             <input type="submit" value="Deconnexion">
                         </p>
@@ -172,7 +174,6 @@
                         Nom complet : {{prenom}} {{nom}}
 
                     </script>
-
                     <p><a href="#deco">Déconnexion</a></p>
                 </section>
 
@@ -219,7 +220,6 @@
 </div>
 
 <script src="js/scripts.js"></script>
-
 
 </body>
 </html>
