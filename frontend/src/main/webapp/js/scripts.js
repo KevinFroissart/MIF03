@@ -9,7 +9,7 @@ window.onload = function () {
         Handlebars.compile($(template).html());
     }
 
-    document.getElementById('toggle-btn').addEventListener('click', () => {
+    $('#toggle-btn').click(() => {
         $('#navigation').slideToggle();
     });
 
@@ -129,11 +129,11 @@ window.addEventListener('hashchange', () => {
                 dataType: "json",
                 success: function (res) {
                     ballotId = res.id;
-                    document.getElementById("supp-vote-input").disabled = false;
+                    $("#supp-vote-input").prop('disabled', false);
                     $("#preuve-vote").html("Votre vote a bien été enregistré.");
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    document.getElementById("supp-vote-input").disabled = true;
+                    $("#supp-vote-input").prop('disabled', true);
                     $("#preuve-vote").html("Vous n'avez pas encore voté.");
                 }
             })
@@ -153,7 +153,6 @@ window.addEventListener('hashchange', () => {
             })
         }
     }
-    console.log("hash : " + hash);
     show(hash);
 });
 
@@ -189,6 +188,7 @@ $('#login-form').on('submit', function (e) {
             });
     }
 });
+
 /**
  * Mon Compte
  */
@@ -197,7 +197,7 @@ $('#change-name-form').on('submit', function (e) {
     let changeNameForm = document.forms.namedItem("change-name-form");
     let formData = new FormData(changeNameForm);
     let data = JSON.stringify(Object.fromEntries(formData));
-    let nom = document.forms["change-name-form"]["nom"].value;
+    let nom = data.nom;
     $.ajax({
         type: "PUT",
         url: URL + "/users/" + login + "/nom",
@@ -231,7 +231,7 @@ $('#vote-form').on('submit', function (e) {
             $("#vote-div").html("Vous avez déjà voté");
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Une erreur est survenue: " + textStatus);
+            alert("Une erreur est survenue: " + textStatus + ": " + errorThrown);
         }
     })
 });
