@@ -1,11 +1,16 @@
 const URL = "https://192.168.75.56/api/v3";
 let token;
-let tkn;
 let login;
 let ballotId;
+let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template"];
 
 window.onload = function () {
+    for (const template of templates) {
+        Handlebars.compile($(template).html());
+    }
+
     document.getElementById('toggle-btn').addEventListener('click', () => {
+        $('#navigation').slideToggle();
     });
 
     $('#navigation li a').on('click', function () {
@@ -19,10 +24,16 @@ window.onload = function () {
     $("#vote-div").html("Vous devez être connecté pour voter.");
 }
 
+/**
+ * Affiche la section courante et et cache toute les autres.
+ */
 function showSection() {
     $($(this).attr('href')).addClass('active').siblings().removeClass('active');
 }
 
+/**
+ * Affiche le menu incomplet pour les utilisateurs non connectés.
+ */
 function hideConnectSections() {
     $('a[href$="monCompte"]').hide();
     $('a[href$="vote"]').hide();
@@ -30,6 +41,9 @@ function hideConnectSections() {
     $('a[href$="deco"]').hide();
 }
 
+/**
+ * Affiche le menu complet pour les utilisateurs connectés.
+ */
 function showConnectSections() {
     $('a[href$="monCompte"]').show();
     $('a[href$="vote"]').show();
@@ -37,6 +51,9 @@ function showConnectSections() {
     $('a[href$="deco"]').show();
 }
 
+/**
+ * Récupère les données nécessaire à l'affichage de l'index.
+ */
 function buildIndex() {
     $.ajax({
         type: "GET",
@@ -48,6 +65,14 @@ function buildIndex() {
         });
 }
 
+setTimeout("buildIndex();", 5000);
+
+/**
+ * Fonction générique qui permet de fetch les candidats.
+ *
+ * @param hash la section.
+ * @param type la balise.
+ */
 function getCandidats(hash, type) {
     $.ajax({
         type: "GET",
@@ -73,13 +98,13 @@ function getCandidats(hash, type) {
         });
 }
 
-setTimeout("buildIndex();", 5000);
-
-let templates = ["#index-template", "#monCompte-template", "#candidats-template", "#vote-template", "#ballot-template", "#candidat-connecte-template"];
+/**
+ * Fonction de routage.
+ */
 window.addEventListener('hashchange', () => {
     let hash = window.location.hash;
     let target = hash.replace('#', '').toString();
-    if (templates.indexOf(`${hash}-template`) >= 0 || hash.includes("candidats/")) {
+    if (templates.indexOf(`${hash}-template`) >= 0 || hash.includes("candidats/") || hash.includes("ballot")) {
         if (target === "index") {
             buildIndex();
         } else if (target === "monCompte") {
@@ -113,7 +138,7 @@ window.addEventListener('hashchange', () => {
                 }
             })
         } else { // candidat
-            hash = "#candidat";
+            hash = "#candidat"
             $.ajax({
                 type: "GET",
                 url: URL + `/election/` + target,
@@ -135,32 +160,34 @@ window.addEventListener('hashchange', () => {
 /**
  * Connexion
  */
-let loginForm = document.forms.namedItem("login-form");
 $('#login-form').on('submit', function (e) {
     e.preventDefault();
-    loginForm = document.forms.namedItem("login-form");
-    let formData = new FormData(loginForm);
-    formData.append('admin', !!formData.get('admin'));
-    let data = JSON.stringify(Object.fromEntries(formData));
-    $.ajax({
-        type: "POST",
-        url: URL + "/users/login",
-        contentType: "application/json",
-        data: data,
-        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
-        dataType: "json"
-    })
-        .done((data, textStatus, request) => {
-            tkn = request.getResponseHeader("authorization");
-            token = tkn.replace("Bearer ", "");
-            login = formData.get('login');
-            window.location.assign(window.location.origin + "/#monCompte");
-            $("#login-form").hide();
-            $("#login-div").html("Vous êtes déjà connecté.");
-            $("#vote-div").html("");
-            $("#vote-form").show();
-            showConnectSections();
-        });
+    if (validate()) {
+        $("#loginInput").removeClass('error');
+        $("#nomInput").removeClass('error');
+        let loginForm = document.forms.namedItem("login-form");
+        let formData = new FormData(loginForm);
+        formData.append('admin', !!formData.get('admin'));
+        let data = JSON.stringify(Object.fromEntries(formData));
+        $.ajax({
+            type: "POST",
+            url: URL + "/users/login",
+            contentType: "application/json",
+            data: data,
+            headers: {"Content-Type": "application/json", "Authorization": `${token}`},
+            dataType: "json"
+        })
+            .done((data, textStatus, request) => {
+                token = request.getResponseHeader("authorization").replace("Bearer ", "");
+                login = formData.get('login');
+                window.location.assign(window.location.origin + "/#monCompte");
+                $("#login-form").hide();
+                $("#login-div").html("Vous êtes déjà connecté.");
+                $("#vote-div").html("");
+                $("#vote-form").show();
+                showConnectSections();
+            });
+    }
 });
 /**
  * Mon Compte
@@ -187,9 +214,9 @@ $('#change-name-form').on('submit', function (e) {
 /**
  * Vote
  */
-let voteForm = document.forms.namedItem("vote-form");
 $('#vote-form').on('submit', function (e) {
     e.preventDefault();
+    let voteForm = document.forms.namedItem("vote-form");
     let formData = new FormData(voteForm);
     let data = JSON.stringify(Object.fromEntries(formData));
     $.ajax({
@@ -208,6 +235,7 @@ $('#vote-form').on('submit', function (e) {
         }
     })
 });
+
 /**
  * Suppression vote
  */
@@ -235,14 +263,13 @@ $('#deco').on('submit', function (e) {
         type: "POST",
         url: URL + "/users/logout",
         contentType: "application/json",
-        headers: {"Content-Type": "application/json", "Authorization": `${tkn}`},
+        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
         dataType: "json",
     })
         .done(() => {
             window.location.assign(window.location.origin + "/#index");
             login = null;
             token = null;
-            tkn = null
             $("#login-div").html("");
             $("#login-form").show();
             $("#vote-form").hide();
@@ -251,6 +278,14 @@ $('#deco').on('submit', function (e) {
         });
 });
 
+/**
+ * Render les template.
+ *
+ * @param script l'id du template
+ * @param data les données fetch ou mockées
+ * @param elt la section
+ * @param type la balise
+ */
 function buildTemplate(script, data, elt, type) {
     let template = $(script).html();
     Mustache.parse(template);
@@ -258,13 +293,31 @@ function buildTemplate(script, data, elt, type) {
     $(`${elt} ${type}`).html(rendered);
 }
 
+/**
+ * Affiche les sections.
+ *
+ * @param hash le nom de la section
+ */
 function show(hash) {
     $(hash)
         .addClass('active').siblings().removeClass('active');
 }
 
-function validation() {
-    return false;
+/**
+ * Valide le formulaire de connexion.
+ *
+ * @returns {boolean}
+ */
+function validate() {
+    let login = document.forms["login-form"]["login"].value;
+    let nom = document.forms["login-form"]["nom"].value;
+    if (login == "" || nom == "") {
+        $("#loginInput").addClass('error');
+        $("#nomInput").addClass('error');
+        alert("Le login et le nom doivent être renseignés");
+        return false;
+    }
+    return true;
 }
 
 //$('input').attr("contentEditable", "true"); on retire pour pouvoir disable des boutons.
