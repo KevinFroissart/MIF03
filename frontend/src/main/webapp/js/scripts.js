@@ -179,7 +179,6 @@ $('#login-form').on('submit', function (e) {
             .done((data, textStatus, request) => {
                 token = request.getResponseHeader("authorization").replace("Bearer ", "");
                 login = formData.get('login');
-                window.location.assign(window.location.origin + "/#monCompte");
                 $("#login-form").hide();
                 $("#login-div").html("Vous êtes déjà connecté.");
                 $("#vote-div").html("");
@@ -226,7 +225,6 @@ $('#vote-form').on('submit', function (e) {
         data: data,
         headers: {"Content-Type": "application/json", "Authorization": `${token}`},
         success: function (res) {
-            window.location.assign(window.location.origin + "/#ballot");
             $("#vote-form").hide();
             $("#vote-div").html("Vous avez déjà voté");
         },
@@ -248,7 +246,8 @@ $('#supp-vote').on('submit', function (e) {
     })
         .done(() => {
             ballotId = null;
-            window.location.assign(window.location.origin + "/#vote");
+            $("#supp-vote-input").prop('disabled', true);
+            $("#preuve-vote").html("Vous n'avez pas encore voté.");
             $("#vote-div").html("");
             $("#vote-form").show();
         });
