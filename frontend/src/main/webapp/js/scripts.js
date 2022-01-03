@@ -85,11 +85,11 @@ function getCandidats(hash, type) {
                 if (login != null) {
                     candidat = {
                         connecte: true,
-                        nom: data[i].replace('election/candidats/', '')
+                        nom: decodeURI(data[i].replace('election/candidats/', '')).replaceAll('+', ' ')
                     };
                 } else {
                     candidat = {
-                        nom: data[i].replace('election/candidats/', '')
+                        nom: decodeURI(data[i].replace('election/candidats/', '')).replaceAll('+', ' ')
                     };
                 }
                 candidats.push(candidat);
