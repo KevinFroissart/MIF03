@@ -99,7 +99,7 @@
                     <h2>Connectez-vous pour pouvoir voter</h2>
                     <div id="login-div">
                     </div>
-                    <form id="login-form" method="post">
+                    <form id="login-form" method="post" onsubmit="return validation();">
                         <p>
                             <label for="login">Entrez votre login :</label>
                             <input type="text" name="login" id="loginInput" autofocus>
@@ -131,7 +131,7 @@
                         <li>Admin : <span id="admin">{{admin}}</span></li>
 
                     </script>
-                    <form method="post" action="" id="change-name-form">
+                    <form method="post" action="" id="change-name-form" onsubmit="return validation();">
                         <p>Modifier mon nom :
                             <input type="text" name="nom">
                             <input type="submit" value="Modifier">
@@ -143,9 +143,10 @@
                 <section id='deco'>
                     <h2>Déconnexion</h2>
                     <form method="post">
-                        <p>Cliquez ici pour vous déconnecter :
-                            <input type="submit" value="Deconnexion">
-                        </p>
+                        <div id="decoSpan">
+                            Cliquez ici pour vous déconnecter :
+                        </div>
+                        <input type="submit" value="Deconnexion" id="decoBouton">
                     </form>
                     <p><a href='#index' onclick="showSection()">Retour à la page d'accueil</a></p>
                 </section>
@@ -182,7 +183,7 @@
                     <h2>Voter !</h2>
                     <div id="vote-div">
                     </div>
-                    <form id="vote-form" method="post">
+                    <form id="vote-form" method="post" onsubmit="return validation();">
                         <p>
                             <label for="candidat-select">Sélectionnez un candidat :</label>
                             <select name="nomCandidat" id="candidat-select">

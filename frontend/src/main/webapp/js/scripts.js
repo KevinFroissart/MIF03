@@ -179,6 +179,8 @@ $('#login-form').on('submit', function (e) {
             .done((data, textStatus, request) => {
                 token = request.getResponseHeader("authorization").replace("Bearer ", "");
                 login = formData.get('login');
+                $("#decoSpan").html("Cliquez ici pour vous déconnecter :");
+                $("#decoBouton").show();
                 $("#login-form").hide();
                 $("#login-div").html("Vous êtes déjà connecté.");
                 $("#vote-div").html("");
@@ -196,18 +198,19 @@ $('#change-name-form').on('submit', function (e) {
     let changeNameForm = document.forms.namedItem("change-name-form");
     let formData = new FormData(changeNameForm);
     let data = JSON.stringify(Object.fromEntries(formData));
-    let nom = data.nom;
+    let nom = document.forms["change-name-form"]["nom"].value;
     $.ajax({
         type: "PUT",
         url: URL + "/users/" + login + "/nom",
         contentType: "application/json",
         data: data,
         headers: {"Content-Type": "application/json", "Authorization": `${token}`},
-        dataType: "json"
-    })
-        .done((data, textStatus, request) => {
+        dataType: "json",
+        success: function (res) {
+            console.log("tst", nom)
             $('#nom').html(nom);
-        });
+        }
+    })
 });
 
 /**
@@ -266,9 +269,10 @@ $('#deco').on('submit', function (e) {
         dataType: "json",
     })
         .done(() => {
-            window.location.assign(window.location.origin + "/#index");
             login = null;
             token = null;
+            $("#decoSpan").html("Vous êtes déconnecté.");
+            $("#decoBouton").hide();
             $("#login-div").html("");
             $("#login-form").show();
             $("#vote-form").hide();
@@ -317,6 +321,10 @@ function validate() {
         return false;
     }
     return true;
+}
+
+function validation() {
+    return false;
 }
 
 //$('input').attr("contentEditable", "true"); on retire pour pouvoir disable des boutons.
