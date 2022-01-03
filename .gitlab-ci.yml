@@ -37,7 +37,6 @@ deploy:
   dependencies:
     - test java
   script:
-    - cd server/
-    - mvn compile
+    - cd frontend/
     - mvn package
-    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY target/server.war gitlabci@192.168.75.28:/opt/tomcat/webapps/tmp.war
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY target/TP-Client-AJAX.war gitlabci@192.168.75.28:/opt/tomcat/webapps/client.war
