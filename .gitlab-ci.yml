@@ -40,3 +40,7 @@ deploy:
     - cd frontend/
     - mvn package
     - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY target/TP-Client-AJAX.war gitlabci@192.168.75.28:/opt/tomcat/webapps/client.war
+    - cd src/main/
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY webapp/css/main.css gitlabci@192.168.75.28:/var/www/client/css/main.css
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY webapp/js/main.css gitlabci@192.168.75.28:/var/www/client/js/scripts.js
+    - scp -o StrictHostKeyChecking=no -i $CI_SSH_KEY webapp/index.html gitlabci@192.168.75.28:/var/www/client/index.html
