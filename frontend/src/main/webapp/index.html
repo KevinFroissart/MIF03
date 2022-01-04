@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <link rel="shortcut icon" href="#">
+    <title>&Eacute;lection M1IF03</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.js"
+            integrity="sha512-SDpqS2G7Z70bGQSl26nhAdQj9YJoQqMOJVBVqE1EyEaAAzdvLFNZ0R06FzBu+E8xTcmbd2dBhvBJuJrbEUiKqA=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" id="toggle-btn" href="#">Menu</a>
+    <span class="navbar-brand">&Eacute;lection M1IF03</span>
+</nav>
+
+<div id="errMsg"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div id="side-bar" class="sidebar-sticky active">
+                <ul id="navigation" class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#index">
+                            <span data-feather="home"></span>
+                            Accueil <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#connect">
+                            <span data-feather="file"></span>
+                            Connexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#monCompte">
+                            <span data-feather="shopping-cart"></span>
+                            Mon compte
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#candidats">
+                            <span data-feather="users"></span>
+                            Candidats
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#vote">
+                            <span data-feather="bar-chart-2"></span>
+                            Voter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ballot">
+                            <span data-feather="layers"></span>
+                            Vérifier mon vote
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#deco">
+                            <span data-feather="layers"></span>
+                            Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <section id='index' class='active'>
+                    <h2>Bienvenue sur l'application Web de la grande élection de 2022 !</h2>
+                    <p>Résultats courants de l'élection :</p>
+                    <ul>
+                        <li>...</li>
+                    </ul>
+                    <script id="index-template" type="x-tmpl-mustache">
+                        {{#.}}
+                            <li>{{nomCandidat}} : {{votes}} vote(s)</li>
+                        {{/.}}
+
+                    </script>
+                </section>
+
+                <section id='connect'>
+                    <h2>Connectez-vous pour pouvoir voter</h2>
+                    <div id="login-div">
+                    </div>
+                    <form id="login-form" method="post" onsubmit="return validation();">
+                        <p>
+                            <label for="login">Entrez votre login :</label>
+                            <input type="text" name="login" id="loginInput" autofocus>
+                        </p>
+                        <p>
+                            <label for="nom">Entrez votre nom :</label>
+                            <input type="text" name="nom" id="nomInput">
+                        </p>
+                        <p>
+                            <label for="admin">Êtes-vous administrateur ?</label>
+                            <input type="checkbox" name="admin">
+                        </p>
+                        <p>
+                            <input type="submit" value="Connexion">
+                        </p>
+                    </form>
+                </section>
+
+                <section id='monCompte'>
+                    <h2>Mon compte</h2>
+                    <ul id='compteList'>
+                        <li>Login : <span id="login"></span></li>
+                        <li>Nom : <span id="nom"></span></li>
+                        <li>Admin : <span id="admin"></span></li>
+                    </ul>
+                    <script id="monCompte-template" type="x-tmpl-mustache">
+                        <li>Login : <span id="login">{{login}}</span></li>
+                        <li>Nom : <span id="nom">{{nom}}</span></li>
+                        <li>Admin : <span id="admin">{{admin}}</span></li>
+
+                    </script>
+                    <form method="post" action="" id="change-name-form" onsubmit="return validation();">
+                        <p>Modifier mon nom :
+                            <input type="text" name="nom" id="changeNomInput">
+                            <input type="submit" value="Modifier">
+                        </p>
+                    </form>
+                    <p><a href='#deco'>Déconnexion</a></p>
+                </section>
+
+                <section id='deco'>
+                    <h2>Déconnexion</h2>
+                    <form method="post">
+                        <div id="decoSpan">
+                            Cliquez ici pour vous déconnecter :
+                        </div>
+                        <input type="submit" value="Deconnexion" id="decoBouton">
+                    </form>
+                    <p><a href='#index' onclick="showSection()">Retour à la page d'accueil</a></p>
+                </section>
+
+                <section id='candidats'>
+                    <h2>Voici la liste des différents candidats</h2>
+                    <ul>
+                        <li><a href="#candidats/Toto">Toto</a></li>
+                    </ul>
+                    <script id="candidats-template" type="x-tmpl-mustache">
+                        {{#.}}
+                        {{#connecte}}
+                            <li><a href="#candidats/{{nom}}">{{nom}}</a></li>
+                        {{/connecte}}
+                        {{^connecte}}
+                            <li>{{nom}}</li>
+                        {{/connecte}}
+                        {{/.}}
+
+                    </script>
+                </section>
+
+                <section id='candidat'>
+                    <h2>Informations sur un candidat</h2>
+                    <script id="candidat-template" type="x-tmpl-mustache">
+                        Nom complet : {{prenom}} {{nom}}
+
+                    </script>
+                    <p><a href="#deco">Déconnexion</a></p>
+                </section>
+
+                <section id='vote'>
+                    <h2>Voter !</h2>
+                    <div id="vote-div">
+                    </div>
+                    <form id="vote-form" method="post" onsubmit="return validation();">
+                        <p>
+                            <label for="candidat-select">Sélectionnez un candidat :</label>
+                            <select name="nomCandidat" id="candidat-select">
+                                <option value="">...</option>
+                            </select>
+                        </p>
+                        <p>
+                            <input type="submit" name="action" value="Envoyer votre vote">
+                        </p>
+                    </form>
+                    <p><a href="#deco">Déconnexion</a></p>
+                    <script id="vote-template" type="x-tmpl-mustache">
+                                    <select name="nomCandidat" id="candidat-select">
+                                    {{#.}}
+                                        <option value="{{nom}}">{{nom}}</option>
+                                    {{/.}}
+                                    </select>
+
+                    </script>
+                </section>
+
+                <section id='ballot'>
+                    <h2>Ma preuve de vote</h2>
+                    <div id="preuve-vote">
+                        <p>Vous n'avez pas encore voté.</p>
+                    </div>
+                    <form id="supp-vote" method="post">
+                        <p><input type="submit" id="supp-vote-input" value="Supprimer votre vote" disabled></p>
+                    </form>
+                    <p><a href='#deco'>Déconnexion</a></p>
+                </section>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="js/scripts.js"></script>
+
+</body>
+</html>

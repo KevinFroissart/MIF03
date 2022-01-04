@@ -1,0 +1,27 @@
+.bg-dark {
+    background-color: #757678 !important;
+}
+
+.navbar-dark .navbar-brand {
+    color: #fff;
+}
+
+section {
+    display: none;
+}
+
+section.active {
+    display: block;
+}
+
+#side-bar {
+    display: none;
+}
+
+#side-bar.active {
+    display: block;
+}
+
+.error {
+    border: 1px solid red;
+}
