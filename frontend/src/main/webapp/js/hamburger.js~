@@ -1,0 +1,23 @@
+let sideBar = null;
+let isDisplayed = true;
+
+window.onload = function () {
+    document.getElementById('toggle-btn').addEventListener('click', show);
+    sideBar = document.getElementById('side-bar');
+
+    $('#navigation li a').on('click', function () {
+        let href = $(this).attr('href');
+        $(href).addClass('active').siblings().removeClass('active');
+        // $(this).parent().addClass('active').siblings().removeClass('active');
+    });
+}
+
+function show() {
+    console.log("tdest");
+    if (isDisplayed) {
+        sideBar.classList.remove('active');
+    } else {
+        sideBar.classList.toggle('active');
+    }
+    isDisplayed = !isDisplayed;
+}
