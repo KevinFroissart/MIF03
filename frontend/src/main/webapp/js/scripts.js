@@ -161,7 +161,7 @@ window.addEventListener('hashchange', () => {
  */
 $('#login-form').on('submit', function (e) {
     e.preventDefault();
-    if (validate()) {
+    if (validateLogin()) {
         $("#loginInput").removeClass('error');
         $("#nomInput").removeClass('error');
         let loginForm = document.forms.namedItem("login-form");
@@ -195,22 +195,24 @@ $('#login-form').on('submit', function (e) {
  */
 $('#change-name-form').on('submit', function (e) {
     e.preventDefault();
-    let changeNameForm = document.forms.namedItem("change-name-form");
-    let formData = new FormData(changeNameForm);
-    let data = JSON.stringify(Object.fromEntries(formData));
-    let nom = document.forms["change-name-form"]["nom"].value;
-    $.ajax({
-        type: "PUT",
-        url: URL + "/users/" + login + "/nom",
-        contentType: "application/json",
-        data: data,
-        headers: {"Content-Type": "application/json", "Authorization": `${token}`},
-        dataType: "json",
-        success: function (res) {
-            console.log("tst", nom)
-            $('#nom').html(nom);
-        }
-    })
+    if (validateChangementNom()) {
+        let changeNameForm = document.forms.namedItem("change-name-form");
+        let formData = new FormData(changeNameForm);
+        let data = JSON.stringify(Object.fromEntries(formData));
+        let nom = document.forms["change-name-form"]["nom"].value;
+        $.ajax({
+            type: "PUT",
+            url: URL + "/users/" + login + "/nom",
+            contentType: "application/json",
+            data: data,
+            headers: {"Content-Type": "application/json", "Authorization": `${token}`},
+            dataType: "json",
+            success: function (res) {
+                $("#changeNomInput").removeClass('error');
+                $('#nom').html(nom);
+            }
+        })
+    }
 });
 
 /**
@@ -311,13 +313,39 @@ function show(hash) {
  *
  * @returns {boolean}
  */
-function validate() {
+function validateLogin() {
     let login = document.forms["login-form"]["login"].value;
     let nom = document.forms["login-form"]["nom"].value;
-    if (login == "" || nom == "") {
-        $("#loginInput").addClass('error');
-        $("#nomInput").addClass('error');
-        alert("Le login et le nom doivent être renseignés");
+    // rien : 0 login : 1, nom : 2 login + nom : 3
+    let flag = login == "" ? nom == "" ? 3 : 1 : nom == "" ? 2 : 0;
+    switch (flag) {
+        case 1:
+            $("#loginInput").addClass('error');
+            alert("Le login doit être renseigné");
+            break;
+        case 2:
+            $("#nomInput").addClass('error');
+            alert("Le nom doit être renseigné");
+            break;
+        case 3:
+            $("#loginInput").addClass('error');
+            $("#nomInput").addClass('error');
+            alert("Le login et le nom doivent être renseignés");
+            break;
+    }
+    return flag == 0;
+}
+
+/**
+ * Valide le formulaire de changement de nom.
+ *
+ * @returns {boolean}
+ */
+function validateChangementNom() {
+    let nom = document.forms["change-name-form"]["nom"].value;
+    if (nom == "") {
+        $("#changeNomInput").addClass('error');
+        alert("Le nom doit être renseigné");
         return false;
     }
     return true;
