@@ -162,8 +162,6 @@ window.addEventListener('hashchange', () => {
 $('#login-form').on('submit', function (e) {
     e.preventDefault();
     if (validateLogin()) {
-        $("#loginInput").removeClass('error');
-        $("#nomInput").removeClass('error');
         let loginForm = document.forms.namedItem("login-form");
         let formData = new FormData(loginForm);
         formData.append('admin', !!formData.get('admin'));
@@ -208,7 +206,6 @@ $('#change-name-form').on('submit', function (e) {
             headers: {"Content-Type": "application/json", "Authorization": `${token}`},
             dataType: "json",
             success: function (res) {
-                $("#changeNomInput").removeClass('error');
                 $('#nom').html(nom);
             }
         })
@@ -337,6 +334,16 @@ function validateLogin() {
 }
 
 /**
+ * Supprime la classe error des champs de connexions s'ils ont été modifiés.
+ */
+$('#login-form').on('change', function (e) {
+    let login = document.forms["login-form"]["login"].value;
+    let nom = document.forms["login-form"]["nom"].value;
+    if (login != "") $("#loginInput").removeClass('error');
+    if (nom != "") $("#nomInput").removeClass('error');
+});
+
+/**
  * Valide le formulaire de changement de nom.
  *
  * @returns {boolean}
@@ -350,6 +357,14 @@ function validateChangementNom() {
     }
     return true;
 }
+
+/**
+ * Supprime la classe error du champ de modification de nom s'il a été modifié.
+ */
+$('#change-name-form').on('change', function (e) {
+    let nom = document.forms["change-name-form"]["nom"].value;
+    if (nom != "") $("#changeNomInput").removeClass('error');
+});
 
 function validation() {
     return false;
