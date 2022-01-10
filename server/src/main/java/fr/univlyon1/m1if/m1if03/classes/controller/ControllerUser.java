@@ -149,7 +149,7 @@ public class ControllerUser extends HttpServlet {
 
             String login = request.getParameter("login");
             String nom = request.getParameter("nom");
-            boolean admin = request.getParameter("admin") == null ? false : request.getParameter("admin").equals(true);
+            boolean admin = request.getParameter("admin") == null ? false : request.getParameter("admin").equals("true");
 
             User user = new User(login, nom, admin);
 
