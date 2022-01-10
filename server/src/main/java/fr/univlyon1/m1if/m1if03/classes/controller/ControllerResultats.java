@@ -36,6 +36,7 @@ public class ControllerResultats extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         uri = APIResponseUtils.splitUri(request.getRequestURI());
+//        super.init();
 
         Map<String, Integer> votes = new LinkedHashMap<>();
         for (String nomCandidat : candidats.keySet()) {

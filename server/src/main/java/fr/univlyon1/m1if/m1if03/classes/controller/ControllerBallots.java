@@ -194,6 +194,7 @@ public class ControllerBallots extends HttpServlet {
                 return;
             }
 
+            bulletins.remove(ballotsId.get(id).getBulletin());
             ballots.remove(user.getLogin());
             ballotsId.remove(id);
             usersId.remove(user);
