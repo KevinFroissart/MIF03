@@ -65,7 +65,7 @@ function buildIndex() {
         });
 }
 
-setTimeout("buildIndex();", 5000);
+setInterval("buildIndex();", 5000);
 
 /**
  * Fonction générique qui permet de fetch les candidats.
